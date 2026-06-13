@@ -66,7 +66,12 @@ Page({
       isVerified: !!verifiedUser,
       verifiedUser,
       showVerifyModal: !verifiedUser,
-      isVerifying: false
+      isVerifying: false,
+      
+      showAdminPasswordModal: false,
+      showAdminConsole: false,
+      adminPassword: "",
+      adminWardrobes: []
     });
     if (verifiedUser) {
       const hasCache = this.hydrateWardrobesCache(verifiedUser);
