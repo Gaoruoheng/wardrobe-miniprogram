@@ -70,7 +70,7 @@
             <text>长按衣柜可以管理或删除</text>
         </view>
     </view>
-    <view class="verify-card" wx:if="{{isVerified}}">
+    <view class="verify-card" bindlongpress="onAdminLongPress" wx:if="{{isVerified}}">
         <image class="verify-avatar" mode="aspectFill" src="{{verifiedUser.avatarUrl}}" wx:if="{{verifiedUser.avatarUrl}}"></image>
         <view class="verify-avatar verify-avatar-empty" wx:else>
             <text>✓</text>
