@@ -38,6 +38,10 @@ Page({
     wardrobeCount: 0,
     isEmpty: true,
     selectedSkin: DEFAULT_SKIN,
+    showAdminPasswordModal: false,
+    showAdminConsole: false,
+    adminPassword: "",
+    adminWardrobes: [],
     skinOptions: SKIN_OPTIONS,
     showSkinSheet: false,
     showActionSheet: false,
@@ -250,6 +254,76 @@ Page({
     } finally {
       if (shouldShowLoading) wx.hideLoading();
     }
+  },
+
+
+  onAdminLongPress() {
+    this.setData({
+      showAdminPasswordModal: true,
+      adminPassword: ""
+    });
+  },
+
+  onAdminPasswordInput(e) {
+    this.setData({ adminPassword: e.detail.value });
+  },
+
+  closeAdminPasswordModal() {
+    this.setData({
+      showAdminPasswordModal: false,
+      adminPassword: ""
+    });
+  },
+
+  async verifyAdminPassword() {
+    const pwd = this.data.adminPassword;
+    if (pwd !== "20060216") {
+      wx.showToast({ title: "密码错误", icon: "error" });
+      return;
+    }
+
+    this.setData({ showAdminPasswordModal: false });
+    wx.showLoading({ title: "拉取数据中...", mask: true });
+    
+    try {
+      const res = await wx.cloud.callFunction({
+        name: "quickstartFunctions",
+        data: {
+          type: "getAdminAllWardrobes",
+          password: pwd
+        }
+      });
+      wx.hideLoading();
+
+      const result = res.result || {};
+      if (result.success) {
+        this.setData({
+          showAdminConsole: true,
+          adminWardrobes: result.wardrobes || []
+        });
+      } else {
+        wx.showToast({ title: result.code || "获取失败", icon: "none" });
+      }
+    } catch (err) {
+      wx.hideLoading();
+      console.error("fetch admin data failed", err);
+      wx.showToast({ title: "接口调用失败", icon: "none" });
+    }
+  },
+  closeAdminConsole() {
+    this.setData({
+      showAdminConsole: false,
+      adminWardrobes: []
+    });
+  },
+
+  adminEnterWardrobe(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    this.setData({ showAdminConsole: false });
+    wx.navigateTo({
+      url: "/pages/index/index?wardrobeId=" + id
+    });
   },
 
   enterWardrobe(e) {

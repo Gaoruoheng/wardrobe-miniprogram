@@ -70,7 +70,7 @@
             <text>长按衣柜可以管理或删除</text>
         </view>
     </view>
-    <view class="verify-card" wx:if="{{isVerified}}">
+    <view class="verify-card" bindlongpress="onAdminLongPress" wx:if="{{isVerified}}">
         <image class="verify-avatar" mode="aspectFill" src="{{verifiedUser.avatarUrl}}" wx:if="{{verifiedUser.avatarUrl}}"></image>
         <view class="verify-avatar verify-avatar-empty" wx:else>
             <text>✓</text>
@@ -313,6 +313,51 @@
             <view bindtap="verifyUser" class="sheet-btn confirm-create-btn verify-btn {{isVerifying?'verify-btn-disabled':''}}">
                 <text>{{isVerifying?'登录中...':'微信用户登录'}}</text>
             </view>
+        </view>
+    </view>
+
+    <!-- ????????? -->
+    <view class="modal-mask" wx:if="{{showAdminPasswordModal}}">
+        <view class="admin-pwd-modal kawaii-card">
+            <view class="modal-head">
+                <text class="modal-title">?? ?????</text>
+            </view>
+            <view class="modal-body">
+                <input bindinput="onAdminPasswordInput" class="kawaii-input" password placeholder="???8??????" type="text" value="{{adminPassword}}"/>
+            </view>
+            <view class="modal-btns">
+                <view bindtap="closeAdminPasswordModal" class="modal-btn cancel-btn">??</view>
+                <view bindtap="verifyAdminPassword" class="modal-btn confirm-btn">??</view>
+            </view>
+        </view>
+    </view>
+
+    <!-- ?????? -->
+    <view class="modal-mask" wx:if="{{showAdminConsole}}">
+        <view class="admin-console-sheet kawaii-card">
+            <view class="admin-console-head">
+                <text class="admin-title">?? ??????</text>
+                <view bindtap="closeAdminConsole" class="admin-close-btn">?</view>
+            </view>
+            <scroll-view scroll-y class="admin-list-scroll">
+                <view class="admin-wardrobe-item" wx:for="{{adminWardrobes}}" wx:key="_id">
+                    <view class="admin-item-meta">
+                        <text class="admin-owner-tag">?? {{item.ownerName}} ????</text>
+                        <view class="admin-item-main">
+                            <text class="admin-item-icon">{{item.icon}}</text>
+                            <text class="admin-item-name">{{item.name}}</text>
+                        </view>
+                        <text class="admin-item-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
+                        <text class="admin-item-info">????: {{item.sharedCount}} | ????: {{item.createTime}}</text>
+                    </view>
+                    <view class="admin-item-actions">
+                        <view bindtap="adminEnterWardrobe" class="admin-action-btn enter" data-id="{{item._id}}">??</view>
+                    </view>
+                </view>
+                <view class="admin-empty" wx:if="{{adminWardrobes.length === 0}}">
+                    <text>????????????</text>
+                </view>
+            </scroll-view>
         </view>
     </view>
 </view>

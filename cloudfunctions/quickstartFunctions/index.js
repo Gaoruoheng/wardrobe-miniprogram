@@ -913,6 +913,60 @@ const registerUser = async (event) => {
 // const fetchGoodsList = require('./fetchGoodsList/index');
 // const genMpQrcode = require('./genMpQrcode/index');
 // 云函数入口函数
+
+async function getAdminAllWardrobes(event) {
+  const data = event.data || {};
+  const pass = data.password || event.password || "";
+  if (pass !== "20060216") {
+    return { success: false, code: "UNAUTHORIZED_ADMIN" };
+  }
+
+  // 1. ????????
+  let users = [];
+  try {
+    const userRes = await db.collection("wardrobe_users").limit(1000).get();
+    users = userRes.data || [];
+  } catch (err) {
+    console.error("fetch admin users error", err);
+  }
+
+  const userMap = {};
+  users.forEach(u => {
+    if (u.openid) {
+      userMap[u.openid] = u.nickName || "????";
+    }
+  });
+
+  // 2. ????????
+  let wardrobes = [];
+  try {
+    const hubsRes = await db.collection("wardrobe_hubs").orderBy("createTime", "desc").limit(1000).get();
+    wardrobes = hubsRes.data || [];
+  } catch (err) {
+    console.error("fetch admin wardrobes error", err);
+  }
+
+  const result = wardrobes.map(w => {
+    const ownerOpenId = w.ownerOpenId || w.ownerOpenid || "";
+    const ownerName = userMap[ownerOpenId] || "????";
+    return {
+      _id: w._id,
+      name: w.name || "????",
+      desc: w.desc || "",
+      icon: w.icon || "??",
+      ownerOpenId,
+      ownerName,
+      createTime: w.createTime || "",
+      shareCode: w.shareCode || "",
+      sharedCount: (w.sharedOpenIds || []).length
+    };
+  });
+
+  return {
+    success: true,
+    wardrobes: result
+  };
+}
 exports.main = async (event, context) => {
   switch (event.type) {
     case "getOpenId":
@@ -931,7 +985,9 @@ exports.main = async (event, context) => {
       return await deleteRecord(event);
     case "registerUser":
       return await registerUser(event);
-    case "getWardrobeSnapshot":
+
+    case "getAdminAllWardrobes":
+      return await getAdminAllWardrobes(event);    case "getWardrobeSnapshot":
       return await getWardrobeSnapshot(event);
     case "deleteWardrobe":
       return await deleteWardrobe(event);
