@@ -776,12 +776,18 @@ Page({
 
   getVisibleCategories(cats, items) {
     const names = [];
-    cats.forEach(cat => {
-      if (cat && names.indexOf(cat) === -1) names.push(cat);
+    const seen = new Set();
+    (cats || []).forEach(cat => {
+      if (cat && !seen.has(cat)) {
+        seen.add(cat);
+        names.push(cat);
+      }
     });
-    items.forEach(item => {
-      if (item.category && names.indexOf(item.category) === -1) {
-        names.push(item.category);
+    (items || []).forEach(item => {
+      const category = item && item.category;
+      if (category && !seen.has(category)) {
+        seen.add(category);
+        names.push(category);
       }
     });
     return names;
@@ -802,9 +808,17 @@ Page({
       ? items.filter(item => itemMatchesKeyword(item, keyword))
       : items;
 
+    const groupedMap = new Map();
+    visibleCats.forEach(cat => {
+      groupedMap.set(cat, []);
+    });
+    filtered.forEach(item => {
+      const bucket = groupedMap.get(item.category);
+      if (bucket) bucket.push(item);
+    });
+
     const grouped = visibleCats.map((cat, index) => {
-      const catItems = filtered
-        .filter(item => item.category === cat)
+      const catItems = (groupedMap.get(cat) || [])
         .sort((left, right) => left.sort_order - right.sort_order)
         .map((item, itemIndex) => {
           const statusItem = decorateItemStatus(item);
@@ -813,7 +827,7 @@ Page({
             ...statusItem,
             display_rank: itemIndex + 1,
             selected,
-            selectText: statusItem.isInUse ? "使用中" : selected ? "OK" : "+",
+            selectText: statusItem.isInUse ? "?????" : selected ? "OK" : "+",
             canSelect: !statusItem.isInUse,
             cls: clothRowClass(selected, false, false, statusItem.wearStatus)
           };
@@ -831,9 +845,9 @@ Page({
       groupedItems: grouped,
       count: filtered.length,
       searchResultText: isCategorySearch
-        ? "定位到 " + visibleCats[matchedCategoryIndex]
+        ? "?????" + visibleCats[matchedCategoryIndex]
         : isSearching
-        ? "匹配到 " + filtered.length + " 件"
+        ? "?????" + filtered.length + " ??"
         : "",
       searchMode: isCategorySearch ? "category" : isSearching ? "item" : "",
       searchTargetCategory: isCategorySearch ? visibleCats[matchedCategoryIndex] : ""
@@ -1018,18 +1032,26 @@ Page({
 
   applyDragClasses(groupedItems, dragCategory, dragIndex, overIndex) {
     return groupedItems.map(group => {
-      const inDragCategory = group.name === dragCategory;
+      if (group.name !== dragCategory) return group;
+      let changed = false;
+      const items = group.items.map((cloth, itemIndex) => {
+        const nextCls = clothRowClass(
+          !!cloth.selected,
+          itemIndex === dragIndex,
+          itemIndex === overIndex && itemIndex !== dragIndex,
+          cloth.wearStatus
+        );
+        if (nextCls === cloth.cls) return cloth;
+        changed = true;
+        return {
+          ...cloth,
+          cls: nextCls
+        };
+      });
+      if (!changed) return group;
       return {
         ...group,
-        items: group.items.map((cloth, itemIndex) => ({
-          ...cloth,
-          cls: clothRowClass(
-            !!cloth.selected,
-            inDragCategory && itemIndex === dragIndex,
-            inDragCategory && itemIndex === overIndex && itemIndex !== dragIndex,
-            cloth.wearStatus
-          )
-        }))
+        items
       };
     });
   },
@@ -1422,13 +1444,17 @@ Page({
       itemMap[item._id] = item;
     });
 
-    const selectedItems = this.data.selectedItemIds
-      .map(id => itemMap[id])
-      .filter(item => !!item && !decorateItemStatus(item).isInUse)
-      .map((item, index) => ({
-        ...decorateItemStatus(item),
-        selected_rank: index + 1
-      }));
+    const selectedItems = [];
+    this.data.selectedItemIds.forEach(id => {
+      const item = itemMap[id];
+      if (!item) return;
+      const statusItem = decorateItemStatus(item);
+      if (statusItem.isInUse) return;
+      selectedItems.push({
+        ...statusItem,
+        selected_rank: selectedItems.length + 1
+      });
+    });
     const selectedItemIds = this.data.allItemsLoaded
       ? selectedItems.map(item => item._id)
       : this.data.selectedItemIds;
