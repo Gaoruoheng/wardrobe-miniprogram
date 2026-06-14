@@ -8,7 +8,7 @@
         <view class="palace-column column-left"></view>
         <view class="palace-column column-right"></view>
         <view class="chandelier"></view>
-        <view class="hero-text">
+        <view class="hero-text" bindlongpress="adminLongPress">
             <text class="eyebrow">🧸 Kuma Closet</text>
             <block wx:if="{{selectedSkin == 'princess-castle'}}">
                 <text class="hero-title hero-title-castle">公主城堡</text>
@@ -79,7 +79,12 @@
             <text class="verify-title">用户已登录</text>
             <text class="verify-name">{{verifiedUser.nickName}}</text>
         </view>
-        
+        <view bindtap="adminQuit" class="verify-quit" wx:if="{{isAdminActive}}">
+            <text>管退</text>
+        </view>
+        <view bindtap="adminLongPress" class="verify-manage" wx:if="{{isAdminActive}}">
+            <text>管理</text>
+        </view>
         <view bindtap="openJoinModal" class="verify-join">
             <text>加入共享</text>
         </view>
@@ -97,13 +102,7 @@
                 <text class="skin-switch-star">✦</text>
                 <text>换肤</text>
             </view>
-            <view bindtap="adminQuit" class="verify-quit" wx:if="{{isAdminActive}}">
-                <text>管退</text>
-            </view>
-            <view bindtap="adminOpenConsole" class="verify-manage" wx:if="{{isAdminActive}}">
-                <text>管理</text>
-            </view>
-            <view class="count-click-area" bindtap="adminOpenPasswordModal"><text class="section-count">{{wardrobeCount}} ?</text></view>
+            <text class="section-count">{{wardrobeCount}} 个</text>
         </view>
     </view>
     <view class="empty-card" wx:if="{{isEmpty}}">
@@ -322,5 +321,44 @@
             </view>
         </view>
     </view>
-
+    <view class="modal-mask" wx:if="{{showAdminPasswordModal}}">
+        <view catchtap="noop" class="admin-pwd-modal">
+            <view class="modal-head">
+                <text class="modal-title">管理员验证</text>
+            </view>
+            <view class="modal-body">
+                <input bindinput="adminPasswordInput" class="admin-input" password placeholder="请输入8位管理员密码" type="text" value="{{adminPassword}}"></input>
+            </view>
+            <view class="modal-btns">
+                <view bindtap="adminClosePwdModal" class="admin-btn cancel-btn">取消</view>
+                <view bindtap="adminVerifyPassword" class="admin-btn confirm-btn">验证</view>
+            </view>
+        </view>
     </view>
+    <view class="modal-mask" wx:if="{{showAdminConsole}}">
+        <view catchtap="noop" class="admin-console-sheet">
+            <view class="admin-console-head">
+                <text class="admin-console-title">管理员控制台</text>
+                <view bindtap="adminCloseConsole" class="admin-close-btn">x</view>
+            </view>
+            <scroll-view scroll-y class="admin-list-scroll">
+                <view class="admin-item" wx:for="{{adminWardrobes}}" wx:key="_id">
+                    <view class="admin-item-meta">
+                        <text class="admin-owner-tag">用户 {{item.ownerName}} 的衣柜：</text>
+                        <view class="admin-item-main">
+                            <text class="admin-item-icon">{{item.icon}}</text>
+                            <text class="admin-item-name">{{item.name}}</text>
+                        </view>
+                        <text class="admin-item-info">共享人数: {{item.sharedCount}} | 创建时间: {{item.createTime}}</text>
+                    </view>
+                    <view class="admin-item-actions">
+                        <view bindtap="adminEnterWardrobe" class="admin-action-btn" data-id="{{item._id}}">查看</view>
+                    </view>
+                </view>
+                <view class="admin-empty" wx:if="{{adminWardrobes.length === 0}}">
+                    <text>当前数据库中暂无其他衣柜</text>
+                </view>
+            </scroll-view>
+        </view>
+    </view>
+</view>

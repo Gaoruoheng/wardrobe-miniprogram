@@ -38,11 +38,6 @@ Page({
     wardrobeCount: 0,
     isEmpty: true,
     selectedSkin: DEFAULT_SKIN,
-    showAdminPasswordModal: false,
-    showAdminConsole: false,
-    adminPassword: "",
-    adminWardrobes: [],
-      isAdminActive: false,
     skinOptions: SKIN_OPTIONS,
     showSkinSheet: false,
     showActionSheet: false,
@@ -56,6 +51,11 @@ Page({
     showVerifyModal: false,
     isVerifying: false,
     showJoinModal: false,
+    showAdminPasswordModal: false,
+    showAdminConsole: false,
+    adminPassword: "",
+    adminWardrobes: [],
+    isAdminActive: false,
     shareCodeInput: "",
     isJoiningShare: false
   },
@@ -68,7 +68,6 @@ Page({
       verifiedUser,
       showVerifyModal: !verifiedUser,
       isVerifying: false,
-      
       showAdminPasswordModal: false,
       showAdminConsole: false,
       adminPassword: "",
@@ -263,36 +262,34 @@ Page({
     }
   },
 
+  
 
-  _adminTapCount: 0,
-  _adminTapTimer: null,
-
-  onAdminTapCount() {
-    if (this.data.isAdminActive) {
-      // ???????????????????????
-      this.setData({ showAdminConsole: true });
-      this.fetchAdminData();
-      return;
-    }
-    
-    this._adminTapCount++;
-    if (this._adminTapTimer) clearTimeout(this._adminTapTimer);
-    
-    if (this._adminTapCount >= 5) {
-      this._adminTapCount = 0;
-      this.setData({
-        showAdminPasswordModal: true,
-        adminPassword: ""
-      });
-    } else {
-      this._adminTapTimer = setTimeout(() => {
-        this._adminTapCount = 0;
-      }, 1000);
-    }
+  adminLongPress() {
+    this.setData({
+      showAdminPasswordModal: true,
+      adminPassword: ""
+    });
   },
 
-  async fetchAdminData() {
-    wx.showLoading({ title: "拉取数据中...", mask: true });
+  adminClosePwdModal() {
+    this.setData({
+      showAdminPasswordModal: false,
+      adminPassword: ""
+    });
+  },
+
+  adminPasswordInput(e) {
+    this.setData({ adminPassword: e.detail.value });
+  },
+
+  async adminVerifyPassword() {
+    if (this.data.adminPassword !== "20060216") {
+      wx.showToast({ title: "\u5bc6\u7801\u9519\u8bef", icon: "error" });
+      return;
+    }
+
+    this.setData({ showAdminPasswordModal: false });
+    wx.showLoading({ title: "\u62c9\u53d6\u6570\u636e\u4e2d...", mask: true });
     try {
       const res = await wx.cloud.callFunction({
         name: "quickstartFunctions",
@@ -302,75 +299,6 @@ Page({
         }
       });
       wx.hideLoading();
-
-      const result = res.result || {};
-      if (result.success) {
-        this.setData({
-          adminWardrobes: result.wardrobes || []
-        });
-      } else {
-        wx.showToast({ title: result.code || "获取失败", icon: "none" });
-      }
-    } catch (err) {
-      wx.hideLoading();
-      console.error("fetch admin data failed", err);
-      wx.showToast({ title: "接口调用失败", icon: "none" });
-    }
-  },
-
-    adminOpenConsole() {
-    this.setData({ showAdminConsole: true });
-    this.fetchAdminData();
-  },
-
-
-    adminOpenPasswordModal() {
-    this.setData({
-      showAdminPasswordModal: true,
-      adminPassword: ""
-    });
-  },
-
-adminQuit() {
-    this.setData({
-      isAdminActive: false,
-      showAdminConsole: false,
-      adminWardrobes: []
-    });
-    wx.showToast({ title: "已退出管理", icon: "success" });
-  },
-
-  onAdminPasswordInput(e) {
-    this.setData({ adminPassword: e.detail.value });
-  },
-
-  closeAdminPasswordModal() {
-    this.setData({
-      showAdminPasswordModal: false,
-      adminPassword: ""
-    });
-  },
-
-  async verifyAdminPassword() {
-    const pwd = this.data.adminPassword;
-    if (pwd !== "20060216") {
-      wx.showToast({ title: "密码错误", icon: "error" });
-      return;
-    }
-
-    this.setData({ showAdminPasswordModal: false });
-    wx.showLoading({ title: "拉取数据中...", mask: true });
-    
-    try {
-      const res = await wx.cloud.callFunction({
-        name: "quickstartFunctions",
-        data: {
-          type: "getAdminAllWardrobes",
-          password: pwd
-        }
-      });
-      wx.hideLoading();
-
       const result = res.result || {};
       if (result.success) {
         this.setData({
@@ -379,30 +307,37 @@ adminQuit() {
           adminWardrobes: result.wardrobes || []
         });
       } else {
-        wx.showToast({ title: result.code || "获取失败", icon: "none" });
+        wx.showToast({ title: result.code || "\u83b7\u53d6\u5931\u8d25", icon: "none" });
       }
     } catch (err) {
       wx.hideLoading();
-      console.error("fetch admin data failed", err);
-      wx.showToast({ title: "接口调用失败", icon: "none" });
+      console.error(err);
+      wx.showToast({ title: "\u63a5\u53e3\u8c03\u7528\u5931\u8d25", icon: "none" });
     }
   },
-  closeAdminConsole() {
+
+  adminCloseConsole() {
     this.setData({
       showAdminConsole: false,
       adminWardrobes: []
     });
   },
 
+  adminQuit() {
+    this.setData({
+      isAdminActive: false,
+      showAdminConsole: false,
+      adminWardrobes: []
+    });
+    wx.showToast({ title: "\u5df2\u9000\u51fa\u7ba1\u7406", icon: "success" });
+  },
+
   adminEnterWardrobe(e) {
     const id = e.currentTarget.dataset.id;
     if (!id) return;
     this.setData({ showAdminConsole: false });
-    wx.navigateTo({
-      url: "/pages/index/index?wardrobeId=" + id
-    });
+    wx.navigateTo({ url: "/pages/index/index?wardrobeId=" + id });
   },
-
   enterWardrobe(e) {
     if (!this.ensureVerified()) return;
     if (this.data.showActionSheet) return;

@@ -987,7 +987,8 @@ exports.main = async (event, context) => {
       return await registerUser(event);
 
     case "getAdminAllWardrobes":
-      return await getAdminAllWardrobes(event);    case "getWardrobeSnapshot":
+      return await getAdminAllWardrobes(event);
+    case "getWardrobeSnapshot":
       return await getWardrobeSnapshot(event);
     case "deleteWardrobe":
       return await deleteWardrobe(event);
