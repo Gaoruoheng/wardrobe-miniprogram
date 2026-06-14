@@ -19,6 +19,10 @@ const {
   upsertItem
 } = require("../../utils/wardrobeCache.js");
 const { DEFAULT_SKIN, syncPageSkin } = require("../../utils/skin.js");
+const {
+  getAdminPasswordForCloud,
+  isAdminModeActive
+} = require("../../utils/adminMode.js");
 
 const FIRST_SCREEN_ITEM_LIMIT = 20;
 const ON_DEMAND_PAGE_SIZE = 20;
@@ -118,6 +122,7 @@ Page({
   data: {
     selectedSkin: DEFAULT_SKIN,
     wardrobeId: "",
+    isAdminViewing: false,
     wardrobeName: "我的衣柜",
     allItems: [],
     categoryNames: [],
@@ -178,7 +183,10 @@ Page({
   onLoad(options) {
     if (!requireVerifiedPage()) return;
     const wardrobeId = options.wardrobeId || "";
-    this.setData({ wardrobeId });
+    this.setData({
+      wardrobeId,
+      isAdminViewing: isAdminModeActive()
+    });
     this._hasIndexCache = wardrobeId ? this.hydrateWardrobeCache(wardrobeId) : false;
     this.loadHeaderImages();
   },
@@ -216,6 +224,7 @@ Page({
   onShow() {
     if (!requireVerifiedPage()) return;
     syncPageSkin(this);
+    this.setData({ isAdminViewing: isAdminModeActive() });
     if (this.data.wardrobeId) {
       this.fetchData({ silent: this._hasIndexCache || this.hasWardrobeContent() });
     }
@@ -278,7 +287,7 @@ Page({
     const cacheId = this.getWardrobeCacheId(wardrobeId);
     const cached = getCache("wardrobe-index", cacheId);
     if (!cached) return false;
-    if (!canAccessOwnedRecord(cached.wardrobe, getVerifiedUser())) {
+    if (!isAdminModeActive() && !canAccessOwnedRecord(cached.wardrobe, getVerifiedUser())) {
       removeCache("wardrobe-index", cacheId);
       removeCache("wardrobe-index", wardrobeId);
       return false;
@@ -494,9 +503,15 @@ Page({
     }
   },
 
-  canUseWardrobe(wardrobe) {
+  canUseWardrobe(wardrobe, options = {}) {
     const user = getVerifiedUser();
+    if (isAdminModeActive()) return true;
     if (canAccessOwnedRecord(wardrobe, user)) return true;
+    if (options.deferRedirect) {
+      const err = new Error("FORBIDDEN");
+      err.code = "FORBIDDEN";
+      throw err;
+    }
     wx.showToast({ title: "无权访问这个衣柜", icon: "none" });
     wx.reLaunch({ url: "/pages/home/home" });
     return false;
@@ -553,7 +568,8 @@ Page({
           wardrobeId: this.data.wardrobeId,
           mode: "index",
           firstCategory: activeCategory,
-          firstLimit: FIRST_SCREEN_ITEM_LIMIT
+          firstLimit: FIRST_SCREEN_ITEM_LIMIT,
+          adminPassword: getAdminPasswordForCloud()
         }
       });
       const result = callRes.result || {};
@@ -574,7 +590,7 @@ Page({
     this.setData({
       allItems: normalizedItems,
       allItemsLoaded: !!options.allItemsLoaded,
-      loadingMoreItems: !options.allItemsLoaded
+      loadingMoreItems: false
     }, () => {
       this.refreshSelectedItems();
       this.buildGrouped(this.data.categoryNames, normalizedItems, {
@@ -585,6 +601,36 @@ Page({
 
   // ??????????? ON_DEMAND_PAGE_SIZE ????????? <= ON_DEMAND_TRIGGER_REMAINING?
   // ?????? <= ?????????????? allItemsLoaded?????????
+  async fetchItemsPage(wardrobeId, skip, limit) {
+    if (isAdminModeActive()) {
+      const callRes = await wx.cloud.callFunction({
+        name: "quickstartFunctions",
+        data: {
+          type: "getWardrobeItemsPage",
+          wardrobeId,
+          skip,
+          limit,
+          adminPassword: getAdminPasswordForCloud()
+        }
+      });
+      const result = callRes.result || {};
+      if (!result.success) {
+        const err = new Error(result.code || "ITEM_PAGE_UNAVAILABLE");
+        err.code = result.code || "ITEM_PAGE_UNAVAILABLE";
+        throw err;
+      }
+      return result.items || [];
+    }
+
+    const res = await db.collection("wardrobe_items")
+      .where({ wardrobeId })
+      .skip(skip)
+      .limit(limit)
+      .orderBy("sort_order", "asc")
+      .get();
+    return res.data || [];
+  },
+
   async loadNextItemPage() {
     const wardrobeId = this.data.wardrobeId;
     if (!wardrobeId || this.data.allItemsLoaded || this.data.loadingMoreItems) return;
@@ -604,18 +650,15 @@ Page({
     try {
       const skip = loadedCount;
       const limit = ON_DEMAND_PAGE_SIZE;
-      const res = await db.collection("wardrobe_items")
-        .where({ wardrobeId })
-        .skip(skip)
-        .limit(limit)
-        .orderBy("sort_order", "asc")
-        .get();
-      const pageItems = res.data || [];
+      const pageItems = await this.fetchItemsPage(wardrobeId, skip, limit);
       const mergedItems = this.mergeItems(this.data.allItems, pageItems);
       const newLoadedCount = mergedItems.length;
       const reachedEnd = pageItems.length < limit || (total > 0 && newLoadedCount >= total);
 
-      if (!this.isCurrentItemFetch(fetchSeq) || wardrobeId !== this.data.wardrobeId) return;
+      if (!this.isCurrentItemFetch(fetchSeq) || wardrobeId !== this.data.wardrobeId) {
+        this.setData({ loadingMoreItems: false });
+        return;
+      }
 
       this.applyProgressItems(mergedItems, {
         allItemsLoaded: reachedEnd,
@@ -646,6 +689,7 @@ Page({
     this._itemsFetchSeq = fetchSeq;
     const hadContent = this.hasWardrobeContent();
     const shouldShowLoading = !options.silent && !hadContent;
+    let shouldRedirectHome = false;
     if (shouldShowLoading) wx.showLoading({ title: "加载中", mask: true });
     try {
       const snapshot = await this.fetchWardrobeSnapshot();
@@ -670,7 +714,7 @@ Page({
         this.applyWardrobePayload(payload, {
           resetActive: !hadContent && !options.silent,
           allItemsLoaded,
-          loadingMoreItems: !allItemsLoaded
+          loadingMoreItems: false
         });
         if (allItemsLoaded) {
           this.cacheWardrobePayload(payload);
@@ -679,7 +723,7 @@ Page({
       }
 
       const hubRes = await db.collection("wardrobe_hubs").doc(this.data.wardrobeId).get();
-      if (!this.canUseWardrobe(hubRes.data)) return;
+      if (!this.canUseWardrobe(hubRes.data, { deferRedirect: true })) return;
       const catRes = await db.collection("wardrobe_categories")
         .where({ wardrobeId: this.data.wardrobeId })
         .orderBy("sort_order", "asc")
@@ -718,12 +762,15 @@ Page({
       console.error(err);
       if (err && err.code === "FORBIDDEN") {
         wx.showToast({ title: "无权访问这个衣柜", icon: "none" });
-        wx.reLaunch({ url: "/pages/home/home" });
+        shouldRedirectHome = true;
       } else if (!options.silent) {
         wx.showToast({ title: "加载失败", icon: "none" });
       }
     } finally {
       if (shouldShowLoading) wx.hideLoading();
+    }
+    if (shouldRedirectHome) {
+      wx.reLaunch({ url: "/pages/home/home" });
     }
   },
 

@@ -14,6 +14,11 @@ const {
   getSelectedSkin,
   setSelectedSkin
 } = require("../../utils/skin.js");
+const {
+  ADMIN_PASSWORD,
+  isAdminModeActive,
+  setAdminModeActive
+} = require("../../utils/adminMode.js");
 
 const STICKERS = [
   "/images/home/bear-wave.png",
@@ -62,22 +67,27 @@ Page({
 
   onShow() {
     const verifiedUser = getVerifiedUser();
+    const isAdminActive = !!verifiedUser && isAdminModeActive();
     this.loadSkinPreference();
-    this.setData({
+    const nextData = {
       isVerified: !!verifiedUser,
       verifiedUser,
       showVerifyModal: !verifiedUser,
       isVerifying: false,
       showAdminPasswordModal: false,
-      showAdminConsole: false,
       adminPassword: "",
-      adminWardrobes: [],
-      isAdminActive: false
-    });
+      isAdminActive
+    };
+    if (!isAdminActive) {
+      nextData.showAdminConsole = false;
+      nextData.adminWardrobes = [];
+    }
+    this.setData(nextData);
     if (verifiedUser) {
       const hasCache = this.hydrateWardrobesCache(verifiedUser);
       this.fetchWardrobes({ silent: hasCache });
     } else {
+      setAdminModeActive(false);
       this.setData({
         wardrobes: [],
         wardrobeCount: 0,
@@ -265,6 +275,13 @@ Page({
   
 
   adminLongPress() {
+    if (this.data.isAdminActive) {
+      this.setData({ showAdminConsole: true });
+      if (this.data.adminWardrobes.length === 0) {
+        this.fetchAdminWardrobes();
+      }
+      return;
+    }
     this.setData({
       showAdminPasswordModal: true,
       adminPassword: ""
@@ -282,38 +299,70 @@ Page({
     this.setData({ adminPassword: e.detail.value });
   },
 
-  async adminVerifyPassword() {
-    if (this.data.adminPassword !== "20060216") {
-      wx.showToast({ title: "\u5bc6\u7801\u9519\u8bef", icon: "error" });
-      return;
+  showAdminFetchError(result = {}, err) {
+    const code = result.code || "";
+    const detail = result.message || (err && (err.errMsg || err.message)) || "";
+    let content = "管理员数据没有成功返回，请稍后重试。";
+
+    if (!result || Object.keys(result).length === 0 || code === "UNKNOWN_FUNCTION_TYPE") {
+      content = "云函数没有返回 getAdminAllWardrobes 的结果。请重新部署 quickstartFunctions 云函数。";
+    } else if (isMissingFunctionError(err)) {
+      content = "没有找到 quickstartFunctions 云函数。请先在云开发里部署。";
+    } else if (code === "UNAUTHORIZED_ADMIN") {
+      content = "管理员密码校验失败。";
+    } else if (code === "FETCH_ADMIN_WARDROBES_FAILED") {
+      content = "云函数读取 wardrobe_hubs 衣柜集合失败。" + (detail ? "\n" + detail : "");
+    } else if (code) {
+      content = code + (detail ? "\n" + detail : "");
+    } else if (detail) {
+      content = detail;
     }
 
-    this.setData({ showAdminPasswordModal: false });
+    console.error("admin fetch failed", { result, err });
+    wx.showModal({
+      title: "拉取数据失败",
+      content,
+      showCancel: false,
+      confirmText: "知道了"
+    });
+  },
+
+  async fetchAdminWardrobes() {
     wx.showLoading({ title: "\u62c9\u53d6\u6570\u636e\u4e2d...", mask: true });
     try {
       const res = await wx.cloud.callFunction({
         name: "quickstartFunctions",
         data: {
           type: "getAdminAllWardrobes",
-          password: "20060216"
+          password: ADMIN_PASSWORD
         }
       });
       wx.hideLoading();
       const result = res.result || {};
       if (result.success) {
+        setAdminModeActive(true);
         this.setData({
           isAdminActive: true,
           showAdminConsole: true,
           adminWardrobes: result.wardrobes || []
         });
       } else {
-        wx.showToast({ title: result.code || "\u83b7\u53d6\u5931\u8d25", icon: "none" });
+        this.showAdminFetchError(result);
       }
     } catch (err) {
       wx.hideLoading();
-      console.error(err);
-      wx.showToast({ title: "\u63a5\u53e3\u8c03\u7528\u5931\u8d25", icon: "none" });
+      this.showAdminFetchError({}, err);
     }
+  },
+
+  async adminVerifyPassword() {
+    if (this.data.adminPassword !== ADMIN_PASSWORD) {
+      wx.showToast({ title: "\u5bc6\u7801\u9519\u8bef", icon: "error" });
+      return;
+    }
+
+    this.setData({ showAdminPasswordModal: false });
+    await this.fetchAdminWardrobes();
   },
 
   adminCloseConsole() {
@@ -324,6 +373,7 @@ Page({
   },
 
   adminQuit() {
+    setAdminModeActive(false);
     this.setData({
       isAdminActive: false,
       showAdminConsole: false,
@@ -409,6 +459,7 @@ Page({
   logoutVerify() {
     const user = getVerifiedUser();
     if (user) removeCache("home-wardrobes", this.getWardrobesCacheId(user));
+    setAdminModeActive(false);
     clearVerification();
     this.setData({
       isVerified: false,

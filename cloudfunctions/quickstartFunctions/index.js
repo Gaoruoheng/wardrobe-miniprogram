@@ -262,6 +262,7 @@ const STATUS_STORED = "stored";
 const DEFAULT_ITEM_NAME = "未命名单品";
 const DEFAULT_ITEM_IMAGE = "/images/default-goods-image.png";
 const DEFAULT_CATEGORIES = ["上衣", "下装", "连衣裙", "鞋子", "配饰"];
+const ADMIN_PASSWORD = "20060216";
 
 function normalizeItemStatus(value) {
   if (value === STATUS_IN_USE || value === "using" || value === "使用中") {
@@ -300,6 +301,19 @@ async function getWardrobeForUser(wardrobeId, openid) {
     if (!canAccessWardrobe(hubRes.data, openid)) {
       return { ok: false, code: "FORBIDDEN" };
     }
+    return { ok: true, wardrobe: hubRes.data };
+  } catch (err) {
+    return { ok: false, code: "WARDROBE_NOT_FOUND" };
+  }
+}
+
+async function getWardrobeForAdmin(wardrobeId) {
+  if (!wardrobeId) {
+    return { ok: false, code: "MISSING_WARDROBE_ID" };
+  }
+
+  try {
+    const hubRes = await db.collection("wardrobe_hubs").doc(wardrobeId).get();
     return { ok: true, wardrobe: hubRes.data };
   } catch (err) {
     return { ok: false, code: "WARDROBE_NOT_FOUND" };
@@ -472,8 +486,11 @@ async function getWardrobeSnapshot(event) {
   const firstCategory = normalizeText(event.firstCategory || data.firstCategory);
   const firstLimitRaw = Number(event.firstLimit || data.firstLimit || 20);
   const firstLimit = Math.max(1, Math.min(firstLimitRaw || 20, 50));
+  const adminPassword = event.adminPassword || data.adminPassword || "";
   const wxContext = cloud.getWXContext();
-  const access = await getWardrobeForUser(wardrobeId, wxContext.OPENID);
+  const access = adminPassword === ADMIN_PASSWORD
+    ? await getWardrobeForAdmin(wardrobeId)
+    : await getWardrobeForUser(wardrobeId, wxContext.OPENID);
   if (!access.ok) return { success: false, code: access.code };
 
   let catRes = await db.collection("wardrobe_categories")
@@ -528,6 +545,36 @@ async function getWardrobeSnapshot(event) {
     selectedItems: results[1],
     priorityCategory: targetCategory,
     allItemsLoaded: totalItems <= items.length
+  };
+}
+
+async function getWardrobeItemsPage(event) {
+  const data = event.data || {};
+  const wardrobeId = normalizeText(event.wardrobeId || data.wardrobeId);
+  const skipRaw = Number(event.skip || data.skip || 0);
+  const limitRaw = Number(event.limit || data.limit || 20);
+  const skip = Math.max(0, skipRaw || 0);
+  const limit = Math.max(1, Math.min(limitRaw || 20, 50));
+  const adminPassword = event.adminPassword || data.adminPassword || "";
+  const wxContext = cloud.getWXContext();
+  const access = adminPassword === ADMIN_PASSWORD
+    ? await getWardrobeForAdmin(wardrobeId)
+    : await getWardrobeForUser(wardrobeId, wxContext.OPENID);
+
+  if (!access.ok) return { success: false, code: access.code };
+
+  const res = await db.collection("wardrobe_items")
+    .where({ wardrobeId })
+    .skip(skip)
+    .limit(limit)
+    .orderBy("sort_order", "asc")
+    .get();
+
+  return {
+    success: true,
+    items: res.data || [],
+    skip,
+    limit
   };
 }
 
@@ -914,46 +961,58 @@ const registerUser = async (event) => {
 // const genMpQrcode = require('./genMpQrcode/index');
 // 云函数入口函数
 
+function getCloudErrorMessage(err) {
+  if (!err) return "";
+  return err.errMsg || err.message || String(err);
+}
+
 async function getAdminAllWardrobes(event) {
   const data = event.data || {};
   const pass = data.password || event.password || "";
-  if (pass !== "20060216") {
+  if (pass !== ADMIN_PASSWORD) {
     return { success: false, code: "UNAUTHORIZED_ADMIN" };
   }
 
-  // 1. ????????
+  // 1. Fetch users for owner name display.
   let users = [];
+  let userFetchMessage = "";
   try {
     const userRes = await db.collection("wardrobe_users").limit(1000).get();
     users = userRes.data || [];
   } catch (err) {
     console.error("fetch admin users error", err);
+    userFetchMessage = getCloudErrorMessage(err);
   }
 
   const userMap = {};
   users.forEach(u => {
     if (u.openid) {
-      userMap[u.openid] = u.nickName || "????";
+      userMap[u.openid] = u.nickName || "衣柜用户";
     }
   });
 
-  // 2. ????????
+  // 2. Fetch all wardrobe hubs. This is the required part of the admin console.
   let wardrobes = [];
   try {
     const hubsRes = await db.collection("wardrobe_hubs").orderBy("createTime", "desc").limit(1000).get();
     wardrobes = hubsRes.data || [];
   } catch (err) {
     console.error("fetch admin wardrobes error", err);
+    return {
+      success: false,
+      code: "FETCH_ADMIN_WARDROBES_FAILED",
+      message: getCloudErrorMessage(err)
+    };
   }
 
   const result = wardrobes.map(w => {
     const ownerOpenId = w.ownerOpenId || w.ownerOpenid || "";
-    const ownerName = userMap[ownerOpenId] || "????";
+    const ownerName = userMap[ownerOpenId] || w.ownerNickName || "衣柜用户";
     return {
       _id: w._id,
-      name: w.name || "????",
+      name: w.name || "未命名衣柜",
       desc: w.desc || "",
-      icon: w.icon || "??",
+      icon: w.icon || "衣",
       ownerOpenId,
       ownerName,
       createTime: w.createTime || "",
@@ -964,7 +1023,9 @@ async function getAdminAllWardrobes(event) {
 
   return {
     success: true,
-    wardrobes: result
+    wardrobes: result,
+    warningCode: userFetchMessage ? "FETCH_ADMIN_USERS_FAILED" : "",
+    warningMessage: userFetchMessage
   };
 }
 exports.main = async (event, context) => {
@@ -990,6 +1051,8 @@ exports.main = async (event, context) => {
       return await getAdminAllWardrobes(event);
     case "getWardrobeSnapshot":
       return await getWardrobeSnapshot(event);
+    case "getWardrobeItemsPage":
+      return await getWardrobeItemsPage(event);
     case "deleteWardrobe":
       return await deleteWardrobe(event);
     case "createItem":
@@ -1006,5 +1069,11 @@ exports.main = async (event, context) => {
       return await setItemSelection(event);
     case "saveItemOrder":
       return await saveItemOrder(event);
+    default:
+      return {
+        success: false,
+        code: "UNKNOWN_FUNCTION_TYPE",
+        type: event.type || ""
+      };
   }
 };
