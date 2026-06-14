@@ -318,7 +318,20 @@ Page({
     }
   },
 
-  quitAdmin() {
+    adminOpenConsole() {
+    this.setData({ showAdminConsole: true });
+    this.fetchAdminData();
+  },
+
+
+    adminOpenPasswordModal() {
+    this.setData({
+      showAdminPasswordModal: true,
+      adminPassword: ""
+    });
+  },
+
+adminQuit() {
     this.setData({
       isAdminActive: false,
       showAdminConsole: false,

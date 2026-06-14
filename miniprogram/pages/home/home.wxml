@@ -75,16 +75,11 @@
         <view class="verify-avatar verify-avatar-empty" wx:else>
             <text>✓</text>
         </view>
-        <view class="verify-info" bindtap="onAdminTapCount">
+        <view class="verify-info">
             <text class="verify-title">用户已登录</text>
             <text class="verify-name">{{verifiedUser.nickName}}</text>
         </view>
-        <view bindtap="quitAdmin" class="verify-quit" wx:if="{{isAdminActive}}">
-            <text>管退</text>
-        </view>
-        <view bindtap="onAdminTapCount" class="verify-manage" wx:if="{{isAdminActive}}">
-            <text>管理</text>
-        </view>
+        
         <view bindtap="openJoinModal" class="verify-join">
             <text>加入共享</text>
         </view>
@@ -102,7 +97,13 @@
                 <text class="skin-switch-star">✦</text>
                 <text>换肤</text>
             </view>
-            <text class="section-count">{{wardrobeCount}} 个</text>
+            <view bindtap="adminQuit" class="verify-quit" wx:if="{{isAdminActive}}">
+                <text>管退</text>
+            </view>
+            <view bindtap="adminOpenConsole" class="verify-manage" wx:if="{{isAdminActive}}">
+                <text>管理</text>
+            </view>
+            <text class="section-count">{{wardrobeCount}} ?</text>
         </view>
     </view>
     <view class="empty-card" wx:if="{{isEmpty}}">
@@ -321,4 +322,8 @@
             </view>
         </view>
     </view>
-</view>
+
+    <!-- ?????????????????? -->
+    <view class="admin-fixed-btn" bindtap="adminOpenPasswordModal">
+        <text>管理</text>
+    </view></view>
