@@ -2530,27 +2530,15 @@ page {
     box-shadow: 0 4rpx 0 rgba(101,74,139,.1);
 }
 
-/* ??????????? - ????????? */
-.admin-fixed-btn {
-    position: fixed !important;
-    bottom: 100rpx;
-    right: 24rpx;
-    width: 100rpx;
-    height: 100rpx;
-    border-radius: 50%;
-    background: rgba(81,64,153,0.85);
-    color: #ffffff;
-    font-size: 28rpx;
-    font-weight: bold;
+
+
+.count-click-area {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
-    box-shadow: 0 8rpx 24rpx rgba(81,64,153,0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    min-width: 84rpx;
+    min-height: 56rpx;
 }
-.admin-fixed-btn:active {
-    transform: scale(0.92);
-    opacity: 0.8;
+.count-click-area:active {
+    opacity: .65;
 }

@@ -103,7 +103,7 @@
             <view bindtap="adminOpenConsole" class="verify-manage" wx:if="{{isAdminActive}}">
                 <text>管理</text>
             </view>
-            <text class="section-count">{{wardrobeCount}} ?</text>
+            <view class="count-click-area" bindtap="adminOpenPasswordModal"><text class="section-count">{{wardrobeCount}} ?</text></view>
         </view>
     </view>
     <view class="empty-card" wx:if="{{isEmpty}}">
@@ -323,7 +323,4 @@
         </view>
     </view>
 
-    <!-- ?????????????????? -->
-    <view class="admin-fixed-btn" bindtap="adminOpenPasswordModal">
-        <text>管理</text>
-    </view></view>
+    </view>
