@@ -1,0 +1,535 @@
+/* Stable Mini Program princess skin v2. */
+.hero-lights,
+.floor-orbit,
+.palace-column,
+.chandelier,
+.window-arch,
+.jewel-case,
+.castle-ground,
+.garden-rail,
+.castle-flag,
+.castle-keep,
+.room-light,
+.room-plaque,
+.room-ornament,
+.moon-ring,
+.wisteria-branch,
+.wisteria-petal,
+.gold-tassel,
+.add-gem {
+    display: none;
+}
+
+.skin-princess-castle {
+    background-color: #fff8fc;
+    background: radial-gradient(circle at 16% 8%,rgba(255,214,231,.7) 0%,rgba(255,214,231,0) 34%),radial-gradient(circle at 90% 14%,rgba(216,231,255,.88) 0%,rgba(216,231,255,0) 36%),linear-gradient(180deg,#fff8fc 0%,#f7f0ff 48%,#fff4da 100%);
+}
+
+.skin-princess-castle::before {
+    background-image: linear-gradient(90deg,rgba(81,64,153,.04) 1rpx,transparent 1rpx),linear-gradient(rgba(81,64,153,.03) 1rpx,transparent 1rpx);
+    background-size: 36rpx 36rpx;
+    opacity: .55;
+}
+
+.skin-princess-castle .bg-dot {
+    opacity: .28;
+}
+
+.skin-princess-castle .dot-one {
+    background: #ffd6e7;
+}
+
+.skin-princess-castle .dot-two {
+    background: #d8e7ff;
+}
+
+.skin-princess-castle .dot-three {
+    background: #ffe58b;
+}
+
+.skin-princess-castle .hero-card {
+    background-color: #fff1f8;
+    background: radial-gradient(circle at 78% 18%,rgba(255,242,190,.56) 0%,rgba(255,242,190,0) 30%),linear-gradient(150deg,#fffaff 0%,#ffe4f0 44%,#dfeaff 74%,#fff1cf 100%);
+    border: 2rpx solid rgba(105,74,134,.28);
+    border-radius: 32rpx;
+    box-shadow: 0 16rpx 34rpx rgba(82,61,126,.16),inset 0 0 0 1rpx rgba(255,255,255,.8);
+    min-height: 388rpx;
+    padding: 28rpx 24rpx 82rpx;
+}
+
+.skin-princess-castle .hero-card::before {
+    background: linear-gradient(90deg,rgba(255,255,255,.2) 1rpx,transparent 1rpx),linear-gradient(rgba(255,255,255,.18) 1rpx,transparent 1rpx);
+    background-size: 42rpx 42rpx;
+    border: 0;
+    border-radius: 0;
+    bottom: 0;
+    height: auto;
+    left: 0;
+    opacity: .9;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.skin-princess-castle .hero-card::after {
+    background: linear-gradient(90deg,transparent,rgba(184,138,51,.5),transparent);
+    border: 0;
+    bottom: 16rpx;
+    height: 1rpx;
+    left: 24rpx;
+    right: 24rpx;
+}
+
+.skin-princess-castle .hero-text {
+    background-color: #4c2e70;
+    background: linear-gradient(150deg,rgba(56,38,91,.97),rgba(76,46,112,.94) 58%,rgba(124,66,123,.9));
+    border: 1rpx solid rgba(255,229,139,.38);
+    border-radius: 26rpx;
+    box-shadow: 0 14rpx 28rpx rgba(53,35,89,.22),inset 0 0 0 1rpx rgba(255,255,255,.12);
+    min-height: 252rpx;
+    padding: 22rpx 20rpx 20rpx;
+    width: 304rpx;
+    z-index: 9;
+}
+
+.skin-princess-castle .hero-text::before {
+    content: none;
+    display: none;
+}
+
+.skin-princess-castle .eyebrow {
+    background: rgba(255,245,209,.14);
+    border: 1rpx solid rgba(255,229,139,.42);
+    box-shadow: none;
+    color: #ffe8aa;
+    font-size: 21rpx;
+    padding: 8rpx 14rpx;
+}
+
+.skin-princess-castle .hero-title {
+    color: #fffaf5;
+    display: block;
+    font-size: 46rpx;
+    line-height: 1.04;
+    margin-top: 14rpx;
+    text-shadow: 0 2rpx 0 rgba(45,28,75,.34),0 8rpx 18rpx rgba(33,21,61,.24);
+}
+
+.skin-princess-castle .hero-title-castle-small {
+    margin-top: 0;
+}
+
+.skin-princess-castle .hero-subtitle {
+    color: #f3dff0;
+    font-size: 23rpx;
+    line-height: 1.5;
+    margin-top: 12rpx;
+}
+
+.skin-princess-castle .hero-stickers {
+    display: none;
+}
+
+.skin-princess-castle .hero-lights,
+.skin-princess-castle .floor-orbit,
+.skin-princess-castle .palace-column,
+.skin-princess-castle .chandelier,
+.skin-princess-castle .window-arch,
+.skin-princess-castle .jewel-case,
+.skin-princess-castle .castle-ground,
+.skin-princess-castle .garden-rail,
+.skin-princess-castle .castle-flag,
+.skin-princess-castle .castle-keep {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+}
+
+.skin-princess-castle .hero-lights {
+    background: radial-gradient(circle at 8% 50%,#fff0a6 0%,#fff0a6 26%,transparent 30%),radial-gradient(circle at 22% 50%,#ffd6e7 0%,#ffd6e7 26%,transparent 30%),radial-gradient(circle at 38% 50%,#fff0a6 0%,#fff0a6 26%,transparent 30%),radial-gradient(circle at 56% 50%,#d8e7ff 0%,#d8e7ff 26%,transparent 30%),radial-gradient(circle at 74% 50%,#fff0a6 0%,#fff0a6 26%,transparent 30%),radial-gradient(circle at 90% 50%,#ffd6e7 0%,#ffd6e7 26%,transparent 30%);
+    height: 12rpx;
+    left: 24rpx;
+    opacity: .85;
+    right: 24rpx;
+    top: 14rpx;
+    z-index: 7;
+}
+
+.skin-princess-castle .floor-orbit {
+    background: rgba(255,229,139,.18);
+    border: 1rpx solid rgba(184,138,51,.18);
+    border-radius: 50%;
+    bottom: 20rpx;
+    height: 58rpx;
+    left: 24rpx;
+    right: 24rpx;
+    z-index: 2;
+}
+
+.skin-princess-castle .palace-column {
+    background: linear-gradient(90deg,rgba(255,255,255,.72),rgba(255,230,242,.32) 48%,rgba(116,88,150,.2));
+    border: 1rpx solid rgba(184,138,51,.18);
+    border-radius: 999rpx;
+    bottom: 44rpx;
+    opacity: .76;
+    top: 58rpx;
+    width: 14rpx;
+    z-index: 3;
+}
+
+.skin-princess-castle .column-left {
+    right: 288rpx;
+}
+
+.skin-princess-castle .column-right {
+    right: 10rpx;
+}
+
+.skin-princess-castle .chandelier {
+    border-bottom: 2rpx solid rgba(184,138,51,.5);
+    border-radius: 0 0 50% 50%;
+    height: 36rpx;
+    right: 142rpx;
+    top: 28rpx;
+    width: 62rpx;
+    z-index: 7;
+}
+
+.skin-princess-castle .chandelier::before {
+    background: rgba(184,138,51,.46);
+    content: "";
+    height: 22rpx;
+    left: 30rpx;
+    position: absolute;
+    top: 0;
+    width: 1rpx;
+}
+
+.skin-princess-castle .chandelier::after {
+    background: radial-gradient(circle at 18% 80%,#fff0a6 0%,#fff0a6 28%,transparent 34%),radial-gradient(circle at 50% 100%,#ffd6e7 0%,#ffd6e7 28%,transparent 34%),radial-gradient(circle at 82% 80%,#fff0a6 0%,#fff0a6 28%,transparent 34%);
+    bottom: -2rpx;
+    content: "";
+    height: 18rpx;
+    left: 8rpx;
+    position: absolute;
+    right: 8rpx;
+}
+
+.skin-princess-castle .window-arch {
+    background-color: #eaf2ff;
+    background: linear-gradient(180deg,rgba(216,231,255,.75),rgba(255,248,252,.78) 58%,rgba(255,214,231,.38));
+    border: 1rpx solid rgba(184,138,51,.3);
+    border-radius: 138rpx 138rpx 34rpx 34rpx;
+    box-shadow: inset 0 0 0 8rpx rgba(255,255,255,.42),0 14rpx 30rpx rgba(81,64,153,.11);
+    height: 288rpx;
+    overflow: hidden;
+    right: 0;
+    top: 48rpx;
+    width: 286rpx;
+    z-index: 2;
+}
+
+.skin-princess-castle .window-arch::before {
+    background: rgba(255,255,255,.45);
+    bottom: 0;
+    content: "";
+    left: 50%;
+    position: absolute;
+    top: 18rpx;
+    width: 1rpx;
+}
+
+.skin-princess-castle .window-arch::after {
+    background: rgba(255,255,255,.45);
+    content: "";
+    height: 1rpx;
+    left: 18rpx;
+    position: absolute;
+    right: 18rpx;
+    top: 148rpx;
+}
+
+.skin-princess-castle .castle-ground {
+    background: linear-gradient(180deg,rgba(255,239,189,.94),rgba(218,203,255,.62));
+    border: 1rpx solid rgba(184,138,51,.22);
+    border-radius: 50%;
+    bottom: 36rpx;
+    height: 76rpx;
+    right: 14rpx;
+    width: 316rpx;
+    z-index: 4;
+}
+
+.skin-princess-castle .garden-rail {
+    background: linear-gradient(90deg,transparent,rgba(184,138,51,.38),transparent);
+    bottom: 102rpx;
+    height: 2rpx;
+    right: 32rpx;
+    width: 250rpx;
+    z-index: 5;
+}
+
+.skin-princess-castle .jewel-case {
+    background: linear-gradient(180deg,#fff9f1,#ffd6e7);
+    border: 1rpx solid rgba(184,138,51,.3);
+    border-radius: 12rpx;
+    bottom: 70rpx;
+    height: 54rpx;
+    right: 286rpx;
+    width: 42rpx;
+    z-index: 6;
+}
+
+.skin-princess-castle .jewel-case::before {
+    background: #ffe58b;
+    border-radius: 50%;
+    content: "";
+    height: 10rpx;
+    left: 15rpx;
+    position: absolute;
+    top: 10rpx;
+    width: 10rpx;
+}
+
+.skin-princess-castle .jewel-case::after {
+    background: #d8e7ff;
+    border-radius: 6rpx;
+    content: "";
+    height: 16rpx;
+    left: 13rpx;
+    position: absolute;
+    top: 28rpx;
+    transform: rotate(45deg);
+    width: 16rpx;
+}
+
+.skin-princess-castle .castle-stage {
+    bottom: 48rpx;
+    display: block;
+    height: 248rpx;
+    opacity: 1;
+    position: absolute;
+    right: 34rpx;
+    transform: none;
+    width: 248rpx;
+    z-index: 8;
+}
+
+.skin-princess-castle .castle-stage::before {
+    background: linear-gradient(180deg,rgba(255,245,209,.74),rgba(255,214,231,.4));
+    border: 1rpx solid rgba(184,138,51,.24);
+    border-radius: 24rpx 24rpx 8rpx 8rpx;
+    bottom: 24rpx;
+    content: "";
+    height: 44rpx;
+    left: 20rpx;
+    position: absolute;
+    right: 18rpx;
+    z-index: 1;
+}
+
+.skin-princess-castle .castle-keep,
+.skin-princess-castle .castle-tower,
+.skin-princess-castle .castle-gate {
+    display: block;
+    position: absolute;
+}
+
+.skin-princess-castle .castle-keep::before,
+.skin-princess-castle .castle-keep::after,
+.skin-princess-castle .castle-tower::before,
+.skin-princess-castle .castle-tower::after,
+.skin-princess-castle .castle-gate::after {
+    content: none;
+    display: none;
+}
+
+.skin-princess-castle .castle-flag {
+    background: linear-gradient(90deg,#ffe58b,#ffd6e7);
+    border: 1rpx solid rgba(184,138,51,.34);
+    border-radius: 0 12rpx 12rpx 0;
+    display: block;
+    height: 22rpx;
+    left: 132rpx;
+    position: absolute;
+    top: 6rpx;
+    width: 44rpx;
+    z-index: 12;
+}
+
+.skin-princess-castle .castle-keep {
+    background-color: #f4d9ea;
+    background: linear-gradient(180deg,#fffafd 0%,#f4d9ea 58%,#d8e7ff 100%);
+    border: 2rpx solid rgba(90,66,144,.26);
+    border-radius: 20rpx 20rpx 6rpx 6rpx;
+    bottom: 58rpx;
+    box-shadow: inset 7rpx 0 12rpx rgba(255,255,255,.5);
+    height: 138rpx;
+    left: 92rpx;
+    width: 66rpx;
+    z-index: 10;
+}
+
+.skin-princess-castle .keep-roof {
+    border-bottom: 54rpx solid #514099;
+    border-left: 39rpx solid transparent;
+    border-right: 39rpx solid transparent;
+    height: 0;
+    left: -8rpx;
+    position: absolute;
+    top: -54rpx;
+    width: 0;
+}
+
+.skin-princess-castle .keep-window {
+    background: linear-gradient(180deg,#fff8be,#f2b852);
+    border: 1rpx solid rgba(103,73,123,.24);
+    border-radius: 14rpx 14rpx 4rpx 4rpx;
+    height: 30rpx;
+    left: 22rpx;
+    position: absolute;
+    top: 30rpx;
+    width: 20rpx;
+}
+
+.skin-princess-castle .keep-door,
+.skin-princess-castle .gate-door {
+    background: linear-gradient(180deg,#6f4c94,#352453);
+    border-radius: 22rpx 22rpx 4rpx 4rpx;
+    bottom: 0;
+    height: 46rpx;
+    left: 20rpx;
+    position: absolute;
+    width: 26rpx;
+}
+
+.skin-princess-castle .castle-tower {
+    background-color: #f7dbe9;
+    background: linear-gradient(180deg,#fff7fd 0%,#f7dbe9 56%,#d8e7ff 100%);
+    border: 2rpx solid rgba(90,66,144,.22);
+    border-radius: 16rpx 16rpx 5rpx 5rpx;
+    bottom: 58rpx;
+    box-shadow: inset 7rpx 0 12rpx rgba(255,255,255,.48);
+    width: 34rpx;
+    z-index: 9;
+}
+
+.skin-princess-castle .tower-roof {
+    border-bottom: 40rpx solid #5a4aa6;
+    border-left: 23rpx solid transparent;
+    border-right: 23rpx solid transparent;
+    height: 0;
+    left: -6rpx;
+    position: absolute;
+    top: -40rpx;
+    width: 0;
+}
+
+.skin-princess-castle .tower-window {
+    background: linear-gradient(180deg,#fff8be,#f2b852);
+    border: 1rpx solid rgba(103,73,123,.22);
+    border-radius: 12rpx 12rpx 3rpx 3rpx;
+    height: 23rpx;
+    left: 10rpx;
+    position: absolute;
+    top: 28rpx;
+    width: 12rpx;
+}
+
+.skin-princess-castle .tower-left {
+    height: 94rpx;
+    left: 8rpx;
+}
+
+.skin-princess-castle .tower-mid-left {
+    height: 122rpx;
+    left: 54rpx;
+}
+
+.skin-princess-castle .tower-center {
+    height: 148rpx;
+    left: 108rpx;
+}
+
+.skin-princess-castle .tower-mid-right {
+    height: 118rpx;
+    right: 48rpx;
+}
+
+.skin-princess-castle .tower-right {
+    height: 90rpx;
+    right: 8rpx;
+}
+
+.skin-princess-castle .castle-gate {
+    background-color: #f7dbe9;
+    background: linear-gradient(180deg,#fff7fd 0%,#f7dbe9 60%,#d8e7ff 100%);
+    border: 2rpx solid rgba(90,66,144,.22);
+    border-radius: 18rpx 18rpx 6rpx 6rpx;
+    bottom: 58rpx;
+    height: 62rpx;
+    left: 44rpx;
+    right: 42rpx;
+    z-index: 8;
+}
+
+.skin-princess-castle .gate-door {
+    height: 38rpx;
+    left: 50%;
+    margin-left: -16rpx;
+    width: 32rpx;
+}
+
+.skin-princess-castle .castle-stairs {
+    bottom: 22rpx;
+    height: 44rpx;
+    left: 24rpx;
+    position: absolute;
+    right: 24rpx;
+    z-index: 12;
+}
+
+.skin-princess-castle .castle-stairs view {
+    background: rgba(255,255,255,.78);
+    border: 1rpx solid rgba(184,138,51,.36);
+    border-radius: 999rpx;
+    height: 8rpx;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+.skin-princess-castle .castle-stairs view:nth-child(1) {
+    bottom: 0;
+    width: 166rpx;
+}
+
+.skin-princess-castle .castle-stairs view:nth-child(2) {
+    bottom: 12rpx;
+    width: 126rpx;
+}
+
+.skin-princess-castle .castle-stairs view:nth-child(3) {
+    bottom: 24rpx;
+    width: 88rpx;
+}
+
+.skin-princess-castle .magic-trail {
+    background: rgba(255,229,139,.2);
+    border: 0;
+    border-radius: 50%;
+    bottom: 12rpx;
+    display: block;
+    height: 74rpx;
+    left: 18rpx;
+    opacity: .8;
+    position: absolute;
+    transform: none;
+    width: 212rpx;
+    z-index: 2;
+}
+
+.skin-princess-castle .hero-spark {
+    display: none;
+}
+

@@ -20,6 +20,10 @@ const {
   upsertItem
 } = require("../../utils/wardrobeCache.js");
 const { DEFAULT_SKIN, syncPageSkin } = require("../../utils/skin.js");
+const {
+  buildCategoryItemCursorWhere,
+  toItemPageResult
+} = require("../../utils/itemPagination.js");
 
 const PAGE_SIZE = 50;
 
@@ -180,25 +184,25 @@ Page({
   },
 
   async fetchCategoryItems(options = {}) {
-    let skip = 0;
+    let cursor = null;
     let items = [];
+    const _ = db.command;
 
     while (true) {
       const res = await db.collection("wardrobe_items")
-        .where({
-          wardrobeId: this.data.wardrobeId,
-          category: this.data.categoryName
-        })
-        .skip(skip)
-        .limit(PAGE_SIZE)
+        .where(buildCategoryItemCursorWhere(_, this.data.wardrobeId, this.data.categoryName, cursor))
+        .orderBy("sort_order", "asc")
+        .orderBy("_id", "asc")
+        .limit(PAGE_SIZE + 1)
         .get();
-      const pageItems = res.data || [];
+      const page = toItemPageResult(res.data || [], PAGE_SIZE);
+      const pageItems = page.items;
       items = items.concat(pageItems);
       if (options.onPage) {
-        options.onPage(pageItems, items.slice(), pageItems.length < PAGE_SIZE);
+        options.onPage(pageItems, items.slice(), !page.hasMore);
       }
-      if (pageItems.length < PAGE_SIZE) break;
-      skip += PAGE_SIZE;
+      if (!page.hasMore) break;
+      cursor = page.nextCursor;
     }
 
     return items;

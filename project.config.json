@@ -74,7 +74,24 @@
   "compileType": "miniprogram",
   "srcMiniprogramRoot": "miniprogram/",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "miniprogram/design"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram/pages/example"
+      },
+      {
+        "type": "folder",
+        "value": "miniprogram/tests"
+      },
+      {
+        "type": "file",
+        "value": "miniprogram/DATABASE_OPTIMIZATION.md"
+      }
+    ],
     "include": []
   },
   "editorSetting": {
