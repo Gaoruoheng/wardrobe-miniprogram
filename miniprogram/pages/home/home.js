@@ -41,6 +41,12 @@ Page({
     isJoiningShare: false
   },
 
+  onLoad(options) {
+    if (options && options.loginTip === "1") {
+      wx.showToast({ title: "先在首页逛逛，想继续时再登录", icon: "none" });
+    }
+  },
+
   onShow() {
     const verifiedUser = getVerifiedUser();
     const isAdminActive = !!verifiedUser && isAdminModeActive();
@@ -48,7 +54,7 @@ Page({
     const nextData = {
       isVerified: !!verifiedUser,
       verifiedUser,
-      showVerifyModal: !verifiedUser,
+      showVerifyModal: false,
       isVerifying: false,
       showAdminPasswordModal: false,
       adminPassword: "",
@@ -196,6 +202,14 @@ Page({
 
   verifyUser() {
     homeWardrobeActions.verifyUser(this);
+  },
+
+  openVerifyModal() {
+    this.setData({ showVerifyModal: true });
+  },
+
+  closeVerifyModal() {
+    homeWardrobeActions.closeVerifyModal(this);
   },
 
   logoutVerify() {

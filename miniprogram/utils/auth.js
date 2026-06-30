@@ -3,6 +3,7 @@ const SESSION_DAYS = 30;
 const SESSION_MS = SESSION_DAYS * 24 * 60 * 60 * 1000;
 const USERS_COLLECTION = "wardrobe_users";
 const AUTH_CLOUD_FUNCTION_MISSING = "AUTH_CLOUD_FUNCTION_MISSING";
+let authRedirectPending = false;
 
 function now() {
   return Date.now();
@@ -200,8 +201,19 @@ async function registerOrLoginUser() {
 
 function requireVerifiedPage() {
   if (isVerified()) return true;
-  wx.showToast({ title: "请先登录", icon: "none" });
-  wx.reLaunch({ url: "/pages/home/home" });
+  if (authRedirectPending) return false;
+  authRedirectPending = true;
+  wx.showToast({ title: "先回首页逛逛，想用这个功能时再登录", icon: "none" });
+  const releaseRedirectLock = () => {
+    setTimeout(() => {
+      authRedirectPending = false;
+    }, 300);
+  };
+  wx.reLaunch({
+    url: "/pages/home/home?loginTip=1",
+    success: releaseRedirectLock,
+    fail: releaseRedirectLock
+  });
   return false;
 }
 

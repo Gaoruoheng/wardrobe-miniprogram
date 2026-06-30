@@ -13,7 +13,7 @@ const homeWardrobeView = require("./homeWardrobeView.js");
 function ensureVerified(page) {
   if (page.data.isVerified) return true;
   page.setData({ showVerifyModal: true });
-  wx.showToast({ title: "请先完成身份验证", icon: "none" });
+  wx.showToast({ title: "先逛逛首页，想创建或进入衣柜时再登录", icon: "none" });
   return false;
 }
 
@@ -102,6 +102,13 @@ function verifyUser(page) {
   });
 }
 
+function closeVerifyModal(page) {
+  page.setData({
+    showVerifyModal: false,
+    isVerifying: false
+  });
+}
+
 function logoutVerify(page) {
   const user = getVerifiedUser();
   if (user) removeCache("home-wardrobes", homeWardrobeView.getWardrobesCacheId(user));
@@ -110,7 +117,7 @@ function logoutVerify(page) {
   page.setData({
     isVerified: false,
     verifiedUser: null,
-    showVerifyModal: true,
+    showVerifyModal: false,
     wardrobes: [],
     wardrobeCount: 0,
     isEmpty: true
@@ -310,6 +317,7 @@ module.exports = {
   onLongPress,
   closeSheet,
   verifyUser,
+  closeVerifyModal,
   logoutVerify,
   openCreateModal,
   openJoinModal,

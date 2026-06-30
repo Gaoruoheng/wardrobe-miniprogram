@@ -1,57 +1,47 @@
-const SKIN_STORAGE_KEY = "kuma_closet_home_skin";
-const DEFAULT_SKIN = "cream-house";
-const PRINCESS_CASTLE_SKIN = "princess-castle";
-const SKIN_OPTIONS = [
-  {
-    id: DEFAULT_SKIN,
-    name: "奶油小屋",
-    desc: "原来的软萌可爱风"
-  },
-  {
-    id: PRINCESS_CASTLE_SKIN,
-    name: "公主城堡衣橱",
-    desc: "城堡、台阶、魔法星尘"
-  }
+var STORAGE_KEY = 'selectedSkin';
+
+var DEFAULT_SKIN = '';
+
+var SKIN_OPTIONS = [
+  { id: '', name: '甜蜜小窝', desc: '温馨可爱' },
+  { id: 'princess-castle', name: '公主城堡', desc: '梦幻粉紫' }
 ];
 
-function normalizeSkinId(value) {
-  return SKIN_OPTIONS.some(item => item.id === value) ? value : DEFAULT_SKIN;
+function normalizeSkin(skin) {
+  var value = skin || DEFAULT_SKIN;
+  return SKIN_OPTIONS.some(function(option) {
+    return option.id === value;
+  }) ? value : DEFAULT_SKIN;
 }
 
 function getSelectedSkin() {
   try {
-    return normalizeSkinId(wx.getStorageSync(SKIN_STORAGE_KEY));
-  } catch (err) {
-    console.warn("read home skin failed", err);
+    return normalizeSkin(wx.getStorageSync(STORAGE_KEY));
+  } catch (e) {
     return DEFAULT_SKIN;
   }
 }
 
-function setSelectedSkin(value) {
-  const selectedSkin = normalizeSkinId(value);
+function setSelectedSkin(skin) {
+  var value = normalizeSkin(skin);
   try {
-    wx.setStorageSync(SKIN_STORAGE_KEY, selectedSkin);
-  } catch (err) {
-    console.warn("save home skin failed", err);
-  }
-  return selectedSkin;
+    wx.setStorageSync(STORAGE_KEY, value);
+  } catch (e) {}
+  return value;
 }
 
 function syncPageSkin(page) {
-  const selectedSkin = getSelectedSkin();
-  if (page && page.data && page.data.selectedSkin !== selectedSkin) {
-    page.setData({ selectedSkin });
+  var skin = getSelectedSkin();
+  if (skin !== page.data.selectedSkin) {
+    page.setData({ selectedSkin: skin });
   }
-  return selectedSkin;
 }
 
 module.exports = {
-  DEFAULT_SKIN,
-  PRINCESS_CASTLE_SKIN,
-  SKIN_OPTIONS,
-  SKIN_STORAGE_KEY,
-  getSelectedSkin,
-  normalizeSkinId,
-  setSelectedSkin,
-  syncPageSkin
+  STORAGE_KEY: STORAGE_KEY,
+  DEFAULT_SKIN: DEFAULT_SKIN,
+  SKIN_OPTIONS: SKIN_OPTIONS,
+  getSelectedSkin: getSelectedSkin,
+  setSelectedSkin: setSelectedSkin,
+  syncPageSkin: syncPageSkin
 };

@@ -650,6 +650,144 @@ page {
     background: linear-gradient(135deg,#ffd2dd 0 34%,#fff9cb 35% 66%,#cdeee2 67%);
 }
 
+.skin-preview-cream-house,
+.skin-preview-princess-castle {
+    position: relative;
+}
+
+.cream-house-cloud {
+    background: rgba(255,255,255,.78);
+    border-radius: 999rpx;
+    height: 14rpx;
+    position: absolute;
+    top: 12rpx;
+}
+
+.cream-house-cloud::before,
+.cream-house-cloud::after {
+    background: inherit;
+    border-radius: inherit;
+    content: "";
+    position: absolute;
+}
+
+.cream-house-cloud::before {
+    height: 16rpx;
+    left: 6rpx;
+    top: -6rpx;
+    width: 22rpx;
+}
+
+.cream-house-cloud::after {
+    height: 12rpx;
+    right: 4rpx;
+    top: -2rpx;
+    width: 16rpx;
+}
+
+.cream-house-cloud.cloud-left {
+    left: 8rpx;
+    width: 30rpx;
+}
+
+.cream-house-cloud.cloud-right {
+    right: 10rpx;
+    width: 24rpx;
+}
+
+.cream-house-sun {
+    background: rgba(255,241,163,.95);
+    border-radius: 50%;
+    height: 18rpx;
+    position: absolute;
+    right: 12rpx;
+    top: 10rpx;
+    width: 18rpx;
+}
+
+.cream-house-bear {
+    bottom: 10rpx;
+    height: 38rpx;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 44rpx;
+}
+
+.cream-house-ear {
+    background: #b88a68;
+    border: 2rpx solid rgba(91,75,66,.25);
+    border-radius: 50%;
+    height: 14rpx;
+    position: absolute;
+    top: 1rpx;
+    width: 14rpx;
+}
+
+.cream-house-ear.ear-left {
+    left: 3rpx;
+}
+
+.cream-house-ear.ear-right {
+    right: 3rpx;
+}
+
+.cream-house-face {
+    background: #fff8f0;
+    border: 2rpx solid rgba(91,75,66,.22);
+    border-radius: 20rpx 20rpx 16rpx 16rpx;
+    bottom: 0;
+    height: 30rpx;
+    left: 6rpx;
+    position: absolute;
+    width: 32rpx;
+}
+
+.cream-house-eye {
+    background: #5b4b42;
+    border-radius: 50%;
+    height: 4rpx;
+    position: absolute;
+    top: 11rpx;
+    width: 4rpx;
+}
+
+.cream-house-eye.eye-left {
+    left: 8rpx;
+}
+
+.cream-house-eye.eye-right {
+    right: 8rpx;
+}
+
+.cream-house-nose {
+    background: #c78e7c;
+    border-radius: 999rpx;
+    height: 5rpx;
+    left: 50%;
+    position: absolute;
+    top: 15rpx;
+    transform: translateX(-50%);
+    width: 8rpx;
+}
+
+.cream-house-blush {
+    background: rgba(255,182,193,.8);
+    border-radius: 50%;
+    height: 6rpx;
+    position: absolute;
+    top: 17rpx;
+    width: 6rpx;
+}
+
+.cream-house-blush.blush-left {
+    left: 4rpx;
+}
+
+.cream-house-blush.blush-right {
+    right: 4rpx;
+}
+
 .skin-preview-princess-castle {
     background: linear-gradient(135deg,#fff 0 18%,#ffd6e7 19% 45%,#d8e7ff 46% 72%,#ffe58b 73%);
 }
@@ -921,7 +1059,12 @@ page {
     color: #6f5a50;
 }
 
-.verify-join,.verify-logout {
+.verify-login {
+    background: #e8f5ef;
+    color: #5f8873;
+}
+
+.verify-join,.verify-login,.verify-logout {
     border: 3rpx solid #5b4b42;
     border-radius: 999rpx;
     box-shadow: 4rpx 4rpx 0 rgba(91,75,66,.12);
@@ -936,6 +1079,10 @@ page {
     background: #e8f5ef;
     color: #5f8873;
     margin-right: 12rpx;
+}
+
+.guest-avatar {
+    color: #c8905b;
 }
 
 .verify-lock,.verify-mask {

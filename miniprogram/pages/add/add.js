@@ -274,7 +274,7 @@ Page({
       return;
     }
     if (!user) {
-      wx.showToast({ title: "请先登录", icon: "none" });
+      wx.showToast({ title: "登录后才能保存衣物", icon: "none" });
       return;
     }
 

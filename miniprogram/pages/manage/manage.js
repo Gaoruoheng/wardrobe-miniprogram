@@ -669,7 +669,7 @@ Page({
     const user = getVerifiedUser();
     if (!name) return;
     if (!user) {
-      wx.showToast({ title: "请先登录", icon: "none" });
+      wx.showToast({ title: "登录后才能添加分类", icon: "none" });
       return;
     }
     if (this.data.categories.some(cat => cat.name === name)) {

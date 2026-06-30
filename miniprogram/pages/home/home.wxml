@@ -14,7 +14,7 @@
                 <text class="hero-title hero-title-castle">公主城堡</text>
                 <text class="hero-title hero-title-castle hero-title-castle-small">衣橱</text>
             </block>
-            <text class="hero-title" wx:if="{{selectedSkin != 'princess-castle'}}">我的衣柜小屋</text>
+            <text class="hero-title" wx:if="{{selectedSkin != 'princess-castle'}}">甜蜜小窝</text>
             <text class="hero-subtitle">{{selectedSkin == 'princess-castle' ? '选择一个衣柜，走进今天的魔法搭配大厅。' : '选择一个衣柜，开始今天的可爱搭配。'}}</text>
         </view>
         <view class="hero-stickers">
@@ -90,6 +90,18 @@
         </view>
         <view bindtap="logoutVerify" class="verify-logout">
             <text>退出</text>
+        </view>
+    </view>
+    <view class="verify-card" wx:else>
+        <view class="verify-avatar verify-avatar-empty guest-avatar">
+            <text>👀</text>
+        </view>
+        <view class="verify-info">
+            <text class="verify-title">游客浏览中</text>
+            <text class="verify-name">可以先看首页和换肤，需要创建、进入或加入衣柜时再登录。</text>
+        </view>
+        <view bindtap="openVerifyModal" class="verify-login">
+            <text>去登录</text>
         </view>
     </view>
     <view class="section-head">
@@ -217,7 +229,7 @@
             <view class="skin-sheet-head">
                 <view>
                     <text class="sheet-title">皮肤更换</text>
-                    <text class="sheet-subtitle">当前：{{selectedSkin == 'princess-castle' ? '公主城堡衣橱' : '奶油小屋'}}</text>
+                    <text class="sheet-subtitle">当前：{{selectedSkin == 'princess-castle' ? '公主城堡' : '甜蜜小窝'}}</text>
                 </view>
                 <view class="skin-sheet-star">
                     <text>✦</text>
@@ -226,6 +238,22 @@
             <view class="skin-options">
                 <view bindtap="selectSkin" class="skin-option {{selectedSkin == item.id ? 'skin-option-active' : ''}}" data-skin="{{item.id}}" wx:for="{{skinOptions}}" wx:key="id">
                     <view class="skin-preview skin-preview-{{item.id}}">
+                        <view class="skin-preview-cream-house" wx:if="{{item.id == ''}}">
+                            <view class="cream-house-cloud cloud-left"></view>
+                            <view class="cream-house-cloud cloud-right"></view>
+                            <view class="cream-house-sun"></view>
+                            <view class="cream-house-bear">
+                                <view class="cream-house-ear ear-left"></view>
+                                <view class="cream-house-ear ear-right"></view>
+                                <view class="cream-house-face">
+                                    <view class="cream-house-eye eye-left"></view>
+                                    <view class="cream-house-eye eye-right"></view>
+                                    <view class="cream-house-nose"></view>
+                                    <view class="cream-house-blush blush-left"></view>
+                                    <view class="cream-house-blush blush-right"></view>
+                                </view>
+                            </view>
+                        </view>
                         <view class="skin-preview-castle" wx:if="{{item.id == 'princess-castle'}}">
                             <view></view>
                             <view></view>
@@ -315,6 +343,9 @@
             <view class="verify-lock">
                 <text class="verify-lock-icon">🔒</text>
                 <text>首次登录会自动注册，登录状态保留 30 天</text>
+            </view>
+            <view bindtap="closeVerifyModal" class="sheet-btn cancel-btn">
+                <text>先逛逛</text>
             </view>
             <view bindtap="verifyUser" class="sheet-btn confirm-create-btn verify-btn {{isVerifying?'verify-btn-disabled':''}}">
                 <text>{{isVerifying?'登录中...':'微信用户登录'}}</text>
