@@ -1,0 +1,58 @@
+<view class="outfit-editor skin-{{selectedSkin}}">
+  <view class="editor-top">
+    <view class="kawaii-back" bindtap="goBack">
+      <view class="kawaii-back-icon"><view class="kawaii-back-stroke"></view></view>
+      <text class="kawaii-back-label">返回</text>
+    </view>
+    <view class="editor-heading">
+      <text class="editor-title">{{outfitId?'编辑套装':'新建套装'}}</text>
+      <text class="editor-sub">搭配会与衣柜成员共享</text>
+    </view>
+  </view>
+
+  <scroll-view class="editor-scroll" scroll-y show-scrollbar="{{false}}">
+    <view class="editor-form-card">
+      <text class="editor-label">套装名称</text>
+      <input class="outfit-name-input" maxlength="20" adjust-position="true" cursor-spacing="190" placeholder="例如：粉色约会套装" value="{{name}}" bindinput="onNameInput"></input>
+      <text class="editor-label note-label">搭配备注（选填）</text>
+      <textarea class="outfit-note-input" maxlength="60" auto-height adjust-position="true" cursor-spacing="160" placeholder="记录场合、季节或搭配提醒" value="{{note}}" bindinput="onNoteInput"></textarea>
+    </view>
+
+    <view class="editor-selection-head">
+      <view>
+        <text class="editor-section-title">选择衣物</text>
+        <text class="editor-section-sub">使用中的衣物也可保存，应用时会自动跳过</text>
+      </view>
+      <view class="outfit-selected-count">已选 {{selectedItemIds.length}} / 20</view>
+    </view>
+
+    <scroll-view class="outfit-category-strip" scroll-x show-scrollbar="{{false}}">
+      <view class="outfit-category {{selectedCategory===''?'active':''}}" data-category="" bindtap="selectCategory">全部</view>
+      <view class="outfit-category {{selectedCategory===item.name?'active':''}}" wx:for="{{groupedItems}}" wx:key="name" data-category="{{item.name}}" bindtap="selectCategory">{{item.name}}</view>
+    </scroll-view>
+
+    <view class="editor-loading" wx:if="{{loading}}">正在打开衣柜...</view>
+    <view class="editor-error" bindtap="retryLoad" wx:elif="{{loadError}}">加载失败，点这里重试</view>
+    <block wx:else>
+      <view class="outfit-group" wx:for="{{groupedItems}}" wx:for-item="group" wx:key="name" wx:if="{{!selectedCategory||selectedCategory===group.name}}">
+        <text class="outfit-group-title">{{group.name}}</text>
+        <view class="outfit-item-card {{item.outfitSelected?'selected':''}}" wx:for="{{group.items}}" wx:key="_id" data-id="{{item._id}}" bindtap="toggleItem">
+          <image class="outfit-item-image" mode="aspectFill" src="{{item.displayUrl||item.url}}"></image>
+          <view class="outfit-item-main">
+            <text class="outfit-item-name">{{item.name}}</text>
+            <text class="outfit-item-status {{item.statusClass}}">{{item.wearStatusText}}</text>
+          </view>
+          <view class="outfit-item-check">
+            <view class="outfit-check-core {{item.outfitSelected?'selected':''}}">{{item.outfitSelected?item.outfitRank:'+'}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="editor-empty" wx:if="{{groupedItems.length===0}}">衣柜里还没有可以选择的衣物</view>
+    </block>
+    <view class="editor-bottom-spacer"></view>
+  </scroll-view>
+
+  <view class="outfit-save-wrap">
+    <view class="outfit-save {{saving?'is-loading':''}}" bindtap="saveOutfit">{{saving?'正在保存...':'保存套装'}}</view>
+  </view>
+</view>

@@ -1,1 +1,21 @@
-{"pages":["pages/home/home","pages/index/index","pages/add/add","pages/manage/manage","pages/category-detail/category","pages/item-detail/item-detail"],"window":{"navigationStyle":"custom","backgroundTextStyle":"light","navigationBarBackgroundColor":"#FFFDF9","navigationBarTitleText":"My Closet","navigationBarTextStyle":"black"},"sitemapLocation":"sitemap.json","style":"v2","lazyCodeLoading":"requiredComponents"}
+{
+  "pages": [
+    "pages/home/home",
+    "pages/index/index",
+    "pages/add/add",
+    "pages/manage/manage",
+    "pages/category-detail/category",
+    "pages/item-detail/item-detail",
+    "pages/outfit-edit/outfit-edit"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFDF9",
+    "navigationBarTitleText": "My Closet",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

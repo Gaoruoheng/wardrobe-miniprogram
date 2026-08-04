@@ -60,3 +60,19 @@ test("task tab registers outfit components and quick-save entry", () => {
 test("outfit integration keeps index WXML nesting valid", () => {
   assertWxmlNesting(read("miniprogram/pages/index/index.wxml"));
 });
+
+test("dedicated outfit editor exposes inputs filters selection and save", () => {
+  const appJson = read("miniprogram/app.json");
+  const editorWxml = read("miniprogram/pages/outfit-edit/outfit-edit.wxml");
+
+  assert.match(appJson, /pages\/outfit-edit\/outfit-edit/);
+  [
+    "outfit-name-input",
+    "outfit-note-input",
+    "outfit-category",
+    "outfit-selected-count",
+    "outfit-item-check",
+    "outfit-save"
+  ].forEach(name => assert.match(editorWxml, new RegExp(name)));
+  assertWxmlNesting(editorWxml);
+});
