@@ -143,10 +143,12 @@ const deleteWardrobe = async (event) => {
 
   const categories = await getAllByWardrobe("wardrobe_categories", wardrobeId);
   const items = await getAllByWardrobe("wardrobe_items", wardrobeId);
+  const outfits = await getAllByWardrobe("wardrobe_outfits", wardrobeId);
   const fileResult = await deleteCloudFiles(collectItemFileIds(items));
 
   await removeDocs("wardrobe_categories", categories.map(item => item._id));
   await removeDocs("wardrobe_items", items.map(item => item._id));
+  await removeDocs("wardrobe_outfits", outfits.map(item => item._id));
   await db.collection("wardrobe_hubs").doc(wardrobeId).remove();
 
   return {
@@ -155,6 +157,7 @@ const deleteWardrobe = async (event) => {
       wardrobe: 1,
       categories: categories.length,
       items: items.length,
+      outfits: outfits.length,
       files: fileResult
     }
   };

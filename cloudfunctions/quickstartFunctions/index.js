@@ -22,6 +22,12 @@ const {
   setItemSelection,
   saveItemOrder
 } = require("./handlers/item.js");
+const {
+  listOutfits,
+  getOutfit,
+  saveOutfit,
+  deleteOutfit
+} = require("./handlers/outfit.js");
 
 const handlers = {
   getOpenId,
@@ -42,7 +48,11 @@ const handlers = {
   updateItemStatus,
   saveSelectedItems,
   setItemSelection,
-  saveItemOrder
+  saveItemOrder,
+  listOutfits,
+  getOutfit,
+  saveOutfit,
+  deleteOutfit
 };
 
 exports.main = async (event = {}) => {
