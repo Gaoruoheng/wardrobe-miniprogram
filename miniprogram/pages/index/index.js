@@ -136,6 +136,9 @@ Page({
     this.setData({ isAdminViewing: isAdminModeActive() });
     if (this.data.wardrobeId) {
       this.fetchData({ silent: this._hasIndexCache || this.hasWardrobeContent() });
+      if (this.data.activeTab === 2 && this._outfitsLoaded) {
+        this.loadOutfits({ skipCache: true, silent: true });
+      }
     }
   },
 

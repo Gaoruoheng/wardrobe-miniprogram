@@ -39,7 +39,7 @@ function hydrateOutfitCache(page) {
 async function loadOutfits(page, options = {}) {
   const hasCache = options.skipCache ? false : hydrateOutfitCache(page);
   page.setData({
-    outfitsLoading: !hasCache,
+    outfitsLoading: !options.silent && !hasCache && (page.data.outfits || []).length === 0,
     outfitLoadError: false
   });
 
@@ -195,7 +195,7 @@ function goEditOutfit(page) {
 
 function applyOutfitMutationFromChild(page, change = {}) {
   let outfits = (page.data.outfits || []).slice();
-  if (change.type === "remove") {
+  if (change.type === "remove" || change.type === "delete") {
     outfits = outfits.filter(outfit => outfit._id !== change.outfitId);
   } else if (change.type === "upsert" && change.outfit) {
     const next = decorateForPage(page, change.outfit);

@@ -139,6 +139,27 @@ async function deleteItem(event) {
   await adjustCategoryItemCount(wardrobeId, access.item.category, -1);
   await updateWardrobeUpdatedAt(wardrobeId, hubData);
 
+  try {
+    const outfitResult = await db.collection("wardrobe_outfits")
+      .where({ wardrobeId })
+      .limit(50)
+      .get();
+    const affectedOutfits = (outfitResult.data || []).filter(outfit =>
+      (outfit.itemIds || []).indexOf(itemId) >= 0
+    );
+    await Promise.all(affectedOutfits.map(outfit =>
+      db.collection("wardrobe_outfits").doc(outfit._id).update({
+        data: {
+          needsCleanup: true,
+          updateTime: db.serverDate(),
+          version: db.command.inc(1)
+        }
+      })
+    ));
+  } catch (error) {
+    console.error("mark outfit cleanup failed", error);
+  }
+
   return {
     success: true,
     selectedItemIds,

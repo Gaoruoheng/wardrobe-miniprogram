@@ -3,6 +3,7 @@ const { backToWardrobe } = require("../../utils/navigation.js");
 const { DEFAULT_SKIN, syncPageSkin } = require("../../utils/skin.js");
 const { normalizeItems, mergeItems } = require("../../utils/indexItemView.js");
 const { removeOutfitCache } = require("../../utils/outfitCache.js");
+const { reconcileOutfitItemIds } = require("../../utils/outfitView.js");
 const wardrobeIndexApi = require("../../services/wardrobeIndexApi.js");
 const outfitApi = require("../../services/outfitApi.js");
 
@@ -52,6 +53,7 @@ Page({
         this.loadAllItems(),
         outfitId ? this.loadOutfit(outfitId) : Promise.resolve()
       ]);
+      this.reconcileSelection();
       this.rebuildGroups();
       this.setData({ loading: false, loadError: false });
     } catch (error) {
@@ -122,6 +124,14 @@ Page({
       });
     });
     this.setData({ groupedItems: groups });
+  },
+
+  reconcileSelection() {
+    const selectedItemIds = reconcileOutfitItemIds(
+      this.data.selectedItemIds,
+      this.data.allItems
+    );
+    this.setData({ selectedItemIds });
   },
 
   onNameInput(event) {
@@ -227,6 +237,7 @@ Page({
       this.loadAllItems(),
       this.data.outfitId ? this.loadOutfit(this.data.outfitId) : Promise.resolve()
     ]).then(() => {
+      this.reconcileSelection();
       this.rebuildGroups();
       this.setData({ loading: false });
     }).catch(error => {

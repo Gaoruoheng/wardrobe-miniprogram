@@ -47,6 +47,9 @@ function formatApplyResult(result = {}) {
   if (added === 0 && duplicate > 0 && inUse === 0 && missing === 0) {
     return "这套衣服已经都在清单里了";
   }
+  if (added === 0 && duplicate === 0 && inUse + missing > 0) {
+    return "套装中的衣物当前都无法加入清单";
+  }
 
   const parts = [];
   if (added > 0) parts.push("已加入 " + added + " 件");
@@ -56,7 +59,15 @@ function formatApplyResult(result = {}) {
   return parts.join("，") || "没有可加入的衣物";
 }
 
+function reconcileOutfitItemIds(itemIds, items) {
+  const available = new Set(
+    safeList(items).map(item => item && item._id).filter(Boolean)
+  );
+  return safeList(itemIds).filter(id => available.has(id));
+}
+
 module.exports = {
   decorateOutfit,
-  formatApplyResult
+  formatApplyResult,
+  reconcileOutfitItemIds
 };

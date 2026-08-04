@@ -76,3 +76,8 @@ test("dedicated outfit editor exposes inputs filters selection and save", () => 
   ].forEach(name => assert.match(editorWxml, new RegExp(name)));
   assertWxmlNesting(editorWxml);
 });
+
+test("task tab silently refreshes outfits when returning from an editor", () => {
+  const indexSource = read("miniprogram/pages/index/index.js");
+  assert.match(indexSource, /activeTab\s*===\s*2[\s\S]*?loadOutfits\(\{\s*skipCache:\s*true/);
+});

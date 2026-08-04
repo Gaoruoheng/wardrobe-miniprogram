@@ -2,6 +2,33 @@ const { getVerifiedUser } = require("./auth.js");
 const { getCache, setCache, removeCache } = require("./pageCache.js");
 const { removeItem, upsertItem } = require("./wardrobeCache.js");
 const { normalizeItems } = require("./indexItemView.js");
+const {
+  getOutfitCache,
+  setOutfitCache
+} = require("./outfitCache.js");
+
+function markOutfitItemDeleted(outfit, itemId) {
+  if (!outfit || (outfit.itemIds || []).indexOf(itemId) < 0) return outfit;
+  return {
+    ...outfit,
+    needsCleanup: true,
+    coverItems: (outfit.coverItems || []).filter(item => item && item._id !== itemId),
+    coverSlots: (outfit.coverSlots || []).map(slot => {
+      if (!slot || slot.itemId !== itemId) return slot;
+      return { ...slot, itemId: "", url: "", empty: true };
+    })
+  };
+}
+
+function syncOutfitsAfterItemDelete(page, itemId) {
+  const user = getVerifiedUser() || {};
+  const cached = getOutfitCache(user, page.data.wardrobeId);
+  const pageOutfits = page.data.outfits || [];
+  const source = page._outfitsLoaded ? pageOutfits : (cached || []);
+  const outfits = source.map(outfit => markOutfitItemDeleted(outfit, itemId));
+  if (source.length > 0) setOutfitCache(user, page.data.wardrobeId, outfits);
+  return page._outfitsLoaded ? outfits : pageOutfits;
+}
 
 function getItemCacheId(page, itemId) {
   const user = getVerifiedUser();
@@ -126,6 +153,7 @@ function applyItemMutationFromChild(page, change) {
   let categoryNames = page.data.categoryNames.slice();
   let allItems = page.data.allItems.slice();
   let selectedItemIds = page.data.selectedItemIds.slice();
+  let outfits = page.data.outfits || [];
 
   if (change.type === "create" && change.item) {
     if (change.item.category && categoryNames.indexOf(change.item.category) < 0) {
@@ -148,13 +176,15 @@ function applyItemMutationFromChild(page, change) {
     const itemId = change.itemId || change.item && change.item._id;
     allItems = removeItem(allItems, itemId);
     selectedItemIds = change.selectedItemIds || selectedItemIds.filter(id => id !== itemId);
+    outfits = syncOutfitsAfterItemDelete(page, itemId);
   }
 
   const normalizedItems = normalizeItems(allItems);
   page.setData({
     categoryNames,
     allItems: normalizedItems,
-    selectedItemIds
+    selectedItemIds,
+    outfits
   }, () => {
     page.refreshSelectedItems();
     page.buildGrouped(categoryNames, normalizedItems, { resetActive: false });

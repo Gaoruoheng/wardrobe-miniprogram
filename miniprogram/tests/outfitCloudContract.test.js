@@ -18,3 +18,11 @@ test("wardrobe deletion removes outfit documents", () => {
   assert.match(source, /getAllByWardrobe\("wardrobe_outfits"/);
   assert.match(source, /removeDocs\("wardrobe_outfits"/);
 });
+
+test("item deletion marks affected outfits for cleanup", () => {
+  const source = read("cloudfunctions/quickstartFunctions/handlers/item.js");
+  assert.match(source, /collection\("wardrobe_outfits"\)/);
+  assert.match(source, /needsCleanup:\s*true/);
+  assert.match(source, /version:\s*db\.command\.inc\(1\)/);
+  assert.match(source, /mark outfit cleanup failed/);
+});
