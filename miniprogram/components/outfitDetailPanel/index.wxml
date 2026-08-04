@@ -1,0 +1,29 @@
+<view class="outfit-panel-mask" wx:if="{{show}}" bindtap="closePanel"></view>
+<view class="outfit-panel" wx:if="{{show}}" catchtap="noop">
+  <view class="outfit-panel-head">
+    <view class="outfit-panel-copy">
+      <text class="outfit-panel-title">{{outfit.name}}</text>
+      <text class="outfit-panel-meta">{{outfit.itemCount}} 件 · {{outfit.createdByName}}</text>
+    </view>
+    <view class="outfit-panel-close-hit" bindtap="closePanel">
+      <view class="outfit-panel-close">×</view>
+    </view>
+  </view>
+
+  <text class="outfit-panel-note" wx:if="{{outfit.note}}">{{outfit.note}}</text>
+  <view class="outfit-panel-warning" wx:if="{{outfit.needsCleanup}}">部分衣物已变化，应用时会自动跳过失效衣物</view>
+  <scroll-view class="outfit-item-strip" scroll-x show-scrollbar="{{false}}" wx:if="{{outfit.items.length}}">
+    <view class="outfit-item" wx:for="{{outfit.items}}" wx:key="_id">
+      <image mode="aspectFill" src="{{item.displayUrl||item.thumbUrl||item.url||item.imageUrl}}"></image>
+      <text>{{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="outfit-panel-manage" wx:if="{{outfit.canManage}}">
+    <view class="outfit-manage-hit" bindtap="editOutfit"><text>编辑套装</text></view>
+    <view class="outfit-manage-hit danger" bindtap="deleteOutfit"><text>删除</text></view>
+  </view>
+  <view class="outfit-apply {{applying?'is-loading':''}}" bindtap="applyOutfit">
+    {{applying?'正在合并...':'加入拿衣清单'}}
+  </view>
+</view>

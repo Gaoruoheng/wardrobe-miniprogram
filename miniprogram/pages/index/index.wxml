@@ -264,6 +264,14 @@
             </view>
             <view class="package-open">打开</view>
         </view>
+        <outfit-section
+            outfits="{{outfits}}"
+            loading="{{outfitsLoading}}"
+            error="{{outfitLoadError}}"
+            bind:create="goCreateOutfit"
+            bind:open="openOutfitDetail"
+            bind:retry="loadOutfits"
+        ></outfit-section>
         <view class="input-row" wx:if="{{showTaskInput}}">
             <input bindinput="onTaskInput" class="kawaii-input-inline" placeholder="新任务" value="{{newTaskText}}"></input>
             <view bindtap="addTask" class="confirm-btn kawaii-btn">OK</view>
@@ -331,9 +339,26 @@
         </scroll-view>
         <view class="pick-panel-actions">
             <view bindtap="clearSelection" class="pick-action-clear">清空清单</view>
+            <view bindtap="openQuickSaveOutfit" class="pick-action-outfit">存为套装</view>
             <view bindtap="confirmSelection" class="pick-action-save">保存清单</view>
         </view>
     </view>
+    <outfit-detail-panel
+        show="{{showOutfitDetail}}"
+        outfit="{{selectedOutfit}}"
+        applying="{{outfitApplying}}"
+        bind:apply="applyCurrentOutfit"
+        bind:edit="goEditOutfit"
+        bind:delete="deleteCurrentOutfit"
+        bind:close="closeOutfitDetail"
+    ></outfit-detail-panel>
+    <outfit-quick-save
+        show="{{showOutfitQuickSave}}"
+        saving="{{outfitSaving}}"
+        item-count="{{selectedItems.length}}"
+        bind:confirm="saveQuickOutfit"
+        bind:close="closeQuickSaveOutfit"
+    ></outfit-quick-save>
     <item-action-panel bind:close="closeItemPanel" bind:edit="editPanelItem" bind:statuschange="markPanelItemStatus" item="{{panelItem}}" show="{{showItemPanel}}"></item-action-panel>
     <view bindtap="goAdd" class="fab-add kawaii-btn {{selectedItems.length>0?'fab-lift':''}}" wx:if="{{activeTab===0}}">
         <block wx:if="{{selectedSkin == 'princess-castle'}}">

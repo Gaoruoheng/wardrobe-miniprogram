@@ -1,0 +1,13 @@
+<view class="quick-save-mask" wx:if="{{show}}" bindtap="closePanel"></view>
+<view class="quick-save-panel" wx:if="{{show}}" catchtap="noop">
+  <view class="quick-save-head">
+    <view>
+      <text class="quick-save-title">存为套装</text>
+      <text class="quick-save-sub">当前 {{itemCount}} 件衣物会长期保存在这个搭配里</text>
+    </view>
+    <view class="quick-save-close-hit" bindtap="closePanel"><view class="quick-save-close">×</view></view>
+  </view>
+  <input class="quick-save-input" maxlength="20" adjust-position="true" cursor-spacing="180" placeholder="例如：粉色约会套装" value="{{name}}" bindinput="onNameInput"></input>
+  <textarea class="quick-save-note" maxlength="60" auto-height adjust-position="true" cursor-spacing="150" placeholder="备注（选填）" value="{{note}}" bindinput="onNoteInput"></textarea>
+  <view class="quick-save-confirm {{saving?'is-loading':''}}" bindtap="confirmSave">{{saving?'正在保存...':'保存套装'}}</view>
+</view>

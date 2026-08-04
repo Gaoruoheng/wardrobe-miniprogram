@@ -1,0 +1,29 @@
+<view class="outfit-section">
+  <view class="outfit-section-head">
+    <view>
+      <text class="outfit-section-title">我的套装</text>
+      <text class="outfit-section-sub">长期保存常用搭配，一键加入清单</text>
+    </view>
+    <view class="outfit-create-hit" bindtap="createOutfit">
+      <view class="outfit-create">＋ 新建</view>
+    </view>
+  </view>
+
+  <scroll-view class="outfit-strip" scroll-x show-scrollbar="{{false}}" wx:if="{{outfits.length}}">
+    <view class="outfit-card" wx:for="{{outfits}}" wx:key="_id" data-id="{{item._id}}" bindtap="openOutfit">
+      <view class="outfit-cover">
+        <view class="outfit-cover-slot {{cover.empty?'is-empty':''}}" wx:for="{{item.coverSlots}}" wx:for-item="cover" wx:key="key">
+          <image lazy-load mode="aspectFill" src="{{cover.url}}" wx:if="{{!cover.empty}}"></image>
+          <view class="outfit-cover-dot" wx:else></view>
+        </view>
+      </view>
+      <text class="outfit-name">{{item.name}}</text>
+      <text class="outfit-meta">{{item.itemCount}} 件 · {{item.createdByName}}</text>
+      <text class="outfit-warning" wx:if="{{item.needsCleanup}}">需要整理</text>
+    </view>
+  </scroll-view>
+
+  <view class="outfit-loading" wx:elif="{{loading}}">正在整理套装...</view>
+  <view class="outfit-error" bindtap="retry" wx:elif="{{error}}">加载失败，点这里重试</view>
+  <view class="outfit-empty" wx:else>还没有套装，从当前拿衣清单保存一套吧</view>
+</view>

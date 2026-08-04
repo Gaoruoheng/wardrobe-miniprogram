@@ -2,6 +2,9 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "cloud-tip-modal": "/components/cloudTipModal/index",
-    "item-action-panel": "/components/itemActionPanel/index"
+    "item-action-panel": "/components/itemActionPanel/index",
+    "outfit-section": "/components/outfitSection/index",
+    "outfit-detail-panel": "/components/outfitDetailPanel/index",
+    "outfit-quick-save": "/components/outfitQuickSave/index"
   }
 }

@@ -15,6 +15,7 @@ const indexGrouping = require("../../utils/indexGrouping.js");
 const indexMetaActions = require("../../utils/indexMetaActions.js");
 const indexPanelActions = require("../../utils/indexPanelActions.js");
 const indexSelectionActions = require("../../utils/indexSelectionActions.js");
+const indexOutfitActions = require("../../utils/indexOutfitActions.js");
 const wardrobeIndexApi = require("../../services/wardrobeIndexApi.js");
 
 Page({
@@ -38,6 +39,14 @@ Page({
     headerBg: "",
     headerImages: [],
     showPickPanel: false,
+    outfits: [],
+    outfitsLoading: false,
+    outfitLoadError: false,
+    selectedOutfit: null,
+    showOutfitDetail: false,
+    showOutfitQuickSave: false,
+    outfitSaving: false,
+    outfitApplying: false,
     activeCat: 0,
     activeTab: 0,
     scrollIntoView: "",
@@ -284,6 +293,7 @@ Page({
         this.buildGrouped(this.data.categoryNames, this.data.allItems, { resetActive: true });
       }
       if (tab === 0) this.scheduleSectionMeasure();
+      if (tab === 2 && !this._outfitsLoaded) this.loadOutfits();
     });
   },
 
@@ -530,6 +540,54 @@ Page({
 
   async saveSelectedItems(ids) {
     return indexSelectionActions.saveSelectedItems(this, ids);
+  },
+
+  hydrateOutfitCache() {
+    return indexOutfitActions.hydrateOutfitCache(this);
+  },
+
+  async loadOutfits(options) {
+    return indexOutfitActions.loadOutfits(this, options);
+  },
+
+  openOutfitDetail(event) {
+    return indexOutfitActions.openOutfitDetail(this, event);
+  },
+
+  closeOutfitDetail() {
+    indexOutfitActions.closeOutfitDetail(this);
+  },
+
+  openQuickSaveOutfit() {
+    indexOutfitActions.openQuickSaveOutfit(this);
+  },
+
+  closeQuickSaveOutfit() {
+    indexOutfitActions.closeQuickSaveOutfit(this);
+  },
+
+  async saveQuickOutfit(event) {
+    return indexOutfitActions.saveQuickOutfit(this, event);
+  },
+
+  async applyCurrentOutfit() {
+    return indexOutfitActions.applyCurrentOutfit(this);
+  },
+
+  async deleteCurrentOutfit() {
+    return indexOutfitActions.deleteCurrentOutfit(this);
+  },
+
+  goCreateOutfit() {
+    indexOutfitActions.goCreateOutfit(this);
+  },
+
+  goEditOutfit() {
+    indexOutfitActions.goEditOutfit(this);
+  },
+
+  applyOutfitMutationFromChild(change) {
+    indexOutfitActions.applyOutfitMutationFromChild(this, change);
   },
 
   formatNow() {
