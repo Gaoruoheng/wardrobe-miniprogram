@@ -89,10 +89,14 @@
         <view class="search-box" wx:if="{{showSearch}}">
             <view class="search-input-wrap">
                 <input bindinput="onSearch" class="search-input" focus="{{showSearch}}" placeholder="搜索名称、分类、颜色或备注" value="{{searchKeyword}}"></input>
-                <view bindtap="clearSearch" class="search-clear" wx:if="{{searchKeyword}}">x</view>
+                <view bindtap="clearSearch" class="search-clear-hit" wx:if="{{searchKeyword}}">
+                    <view class="search-clear">x</view>
+                </view>
             </view>
-            <view class="search-meta" wx:if="{{searchResultText}}">
-                <text>{{searchResultText}}</text>
+            <view class="search-feedback">
+                <text wx:if="{{searchKeyword && searchResultText}}">{{searchResultText}}</text>
+                <text wx:elif="{{searchKeyword}}">正在筛选衣物...</text>
+                <text wx:else>支持名称、分类、颜色和备注</text>
             </view>
         </view>
     </view>
@@ -144,22 +148,24 @@
                         <view class="cloth-drag-handle">
                             <text>=</text>
                         </view>
-                        <view catchtap="toggleClothSelection" class="cloth-select-btn {{cloth.selected?'selected':''}} {{cloth.isInUse?'in-use':''}}" data-id="{{cloth._id}}">
-                            <block wx:if="{{selectedSkin == 'princess-castle' && !cloth.isInUse}}">
-                                <view class="mooncake-button">
-                                    <view class="mooncake-ridge ridge-top"></view>
-                                    <view class="mooncake-ridge ridge-right"></view>
-                                    <view class="mooncake-ridge ridge-bottom"></view>
-                                    <view class="mooncake-ridge ridge-left"></view>
-                                    <view class="mooncake-dot dot-one"></view>
-                                    <view class="mooncake-dot dot-two"></view>
-                                    <view class="mooncake-dot dot-three"></view>
-                                    <view class="mooncake-center">
-                                        <text>{{cloth.selected?'✓':'+'}}</text>
+                        <view catchtap="toggleClothSelection" class="cloth-select-hit" data-id="{{cloth._id}}">
+                            <view class="cloth-select-btn {{cloth.selected?'selected':''}} {{cloth.isInUse?'in-use':''}}">
+                                <block wx:if="{{selectedSkin == 'princess-castle' && !cloth.isInUse}}">
+                                    <view class="mooncake-button">
+                                        <view class="mooncake-ridge ridge-top"></view>
+                                        <view class="mooncake-ridge ridge-right"></view>
+                                        <view class="mooncake-ridge ridge-bottom"></view>
+                                        <view class="mooncake-ridge ridge-left"></view>
+                                        <view class="mooncake-dot dot-one"></view>
+                                        <view class="mooncake-dot dot-two"></view>
+                                        <view class="mooncake-dot dot-three"></view>
+                                        <view class="mooncake-center">
+                                            <text>{{cloth.selected?'✓':'+'}}</text>
+                                        </view>
                                     </view>
-                                </view>
-                            </block>
-                            <text wx:else>{{cloth.selectText}}</text>
+                                </block>
+                                <text wx:else>{{cloth.selectText}}</text>
+                            </view>
                         </view>
                     </view>
                 </view>
@@ -172,7 +178,8 @@
                     <text>{{showSearch&&searchMode==='item'?'这个分类没有匹配结果':'这个分类还没有衣服'}}</text>
                 </view>
             </view>
-            <view class="loading-more" wx:if="{{loadingMoreItems&&count>0}}">
+            <view class="list-loading" wx:if="{{loadingMoreItems}}">
+                <view class="loading-dot"></view>
                 <text>正在同步更多衣服...</text>
             </view>
             <view style="height:220rpx;"></view>
@@ -223,11 +230,13 @@
             <view bindtap="addPlan" class="confirm-btn kawaii-btn">OK</view>
         </view>
         <view class="todo-item" wx:for="{{plans}}" wx:key="id">
-            <view bindtap="togglePlanDone" class="todo-check {{item.done?'done':''}}" data-index="{{index}}">
-                <text>{{item.done?'OK':''}}</text>
+            <view bindtap="togglePlanDone" class="todo-check-hit" data-index="{{index}}">
+                <view class="todo-check {{item.done?'done':''}}">
+                    <text>{{item.done?'OK':''}}</text>
+                </view>
             </view>
             <text class="todo-text {{item.done?'strikethrough':''}}">{{item.text}}</text>
-            <view bindtap="deletePlan" class="todo-del" data-index="{{index}}">x</view>
+            <view bindtap="deletePlan" class="todo-del-hit" data-index="{{index}}"><view class="todo-del">x</view></view>
         </view>
         <view class="empty-tip" wx:if="{{plans.length===0}}">
             <text>还没有计划</text>
@@ -260,11 +269,13 @@
             <view bindtap="addTask" class="confirm-btn kawaii-btn">OK</view>
         </view>
         <view class="todo-item" wx:for="{{tasks}}" wx:key="id">
-            <view bindtap="toggleTaskDone" class="todo-check {{item.done?'done':''}}" data-index="{{index}}">
-                <text>{{item.done?'OK':''}}</text>
+            <view bindtap="toggleTaskDone" class="todo-check-hit" data-index="{{index}}">
+                <view class="todo-check {{item.done?'done':''}}">
+                    <text>{{item.done?'OK':''}}</text>
+                </view>
             </view>
             <text class="todo-text {{item.done?'strikethrough':''}}">{{item.text}}</text>
-            <view bindtap="deleteTask" class="todo-del" data-index="{{index}}">x</view>
+            <view bindtap="deleteTask" class="todo-del-hit" data-index="{{index}}"><view class="todo-del">x</view></view>
         </view>
         <view class="empty-tip" wx:if="{{tasks.length===0&&selectedItems.length===0}}">
             <text>还没有任务</text>
@@ -304,7 +315,7 @@
                 <text class="pick-panel-title">拿衣清单</text>
                 <text class="pick-panel-sub">她选中的衣服会保存在这个衣柜里</text>
             </view>
-            <view bindtap="closePickPanel" class="pick-panel-close">x</view>
+            <view bindtap="closePickPanel" class="pick-panel-close-hit"><view class="pick-panel-close">x</view></view>
         </view>
         <scroll-view scroll-y class="pick-list" show-scrollbar="{{false}}">
             <view class="pick-item" wx:for="{{selectedItems}}" wx:key="_id">

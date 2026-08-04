@@ -1,9 +1,21 @@
 /**app.wxss**/
 page {
   --theme-color: #5C4B51; /* Dark Brown */
+  --text-main: #5C4B51;
+  --text-muted: #6F6268;
+  --text-subtle: #7D6A70;
   --bg-color: #F8F3E9; /* Off-white/Cream */
+  --surface-color: #FFFDF9;
+  --surface-strong: #FFFFFF;
   --accent-color: #F0A07C; /* Soft Coral/Orange */
+  --accent-pink: #FFB7C5;
+  --accent-blue: #A8D8EA;
   --border-radius: 20rpx;
+  --radius-sm: 12rpx;
+  --radius-md: 20rpx;
+  --radius-lg: 20rpx;
+  --radius-card: 24rpx;
+  --touch-target: 88rpx;
   --box-shadow: 4rpx 4rpx 0px rgba(92, 75, 81, 1);
   --border-thick: 4rpx solid #5C4B51;
   background-color: var(--bg-color);
@@ -19,6 +31,8 @@ view, text, scroll-view, image {
 .kawaii-back {
   width: 82rpx;
   height: 76rpx;
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,10 +49,10 @@ view, text, scroll-view, image {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFFDF9;
+  background: var(--surface-color);
   border: 4rpx solid #5C4B51;
   border-radius: 50%;
-  box-shadow: 4rpx 4rpx 0 #FFB7C5;
+  box-shadow: 4rpx 4rpx 0 var(--accent-pink);
   box-sizing: border-box;
 }
 
@@ -59,7 +73,7 @@ view, text, scroll-view, image {
 
 .kawaii-back:active .kawaii-back-icon {
   transform: translate(2rpx, 2rpx);
-  box-shadow: 2rpx 2rpx 0 #FFB7C5;
+  box-shadow: 2rpx 2rpx 0 var(--accent-pink);
 }
 
 .container {
@@ -71,8 +85,8 @@ view, text, scroll-view, image {
 
 /* Button Reset & Global Cute Style */
 button {
-  background: #FFF;
-  color: var(--theme-color);
+  background: var(--surface-strong);
+  color: var(--text-main);
   border: var(--border-thick);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);

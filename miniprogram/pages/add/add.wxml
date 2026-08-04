@@ -100,12 +100,12 @@
 
       <view class="form-item">
         <text class="label">名称（可选）</text>
-        <input class="kawaii-input" placeholder="例如：粉色针织开衫" bindinput="onNameInput" value="{{name}}" />
+        <input class="kawaii-input" placeholder="例如：粉色针织开衫" bindinput="onNameInput" value="{{name}}" adjust-position="true" cursor-spacing="160" />
       </view>
 
       <view class="form-item">
         <text class="label">颜色 / 备注（可选）</text>
-        <input class="kawaii-input" placeholder="例如：粉色、白色蝴蝶结" bindinput="onColorInput" value="{{color}}" />
+        <input class="kawaii-input" placeholder="例如：粉色、白色蝴蝶结" bindinput="onColorInput" value="{{color}}" adjust-position="true" cursor-spacing="160" />
       </view>
     </view>
 
@@ -143,6 +143,8 @@
           placeholder="输入新分类，例如：帽子"
           value="{{newCategoryName}}"
           maxlength="12"
+          adjust-position="true"
+          cursor-spacing="160"
           bindinput="onNewCategoryInput"
         />
         <view class="new-category-btn {{isSavingCategory ? 'disabled' : ''}}" bindtap="addCategory">

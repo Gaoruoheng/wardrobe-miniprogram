@@ -22,7 +22,7 @@
   padding: 0 22rpx;
   display: flex;
   align-items: center;
-  background: #FFFFFF;
+  background: var(--surface-strong);
   border: 4rpx solid #5C4B51;
   border-radius: 999rpx;
   box-shadow: 4rpx 4rpx 0 #A8D8EA;
@@ -79,7 +79,7 @@
 .title-sub {
   display: block;
   font-size: 24rpx;
-  color: #7D6A70;
+  color: var(--text-muted);
   line-height: 1.45;
 }
 
@@ -134,7 +134,7 @@
 .upload-sub {
   margin-top: 8rpx;
   font-size: 22rpx;
-  color: #8C7B82;
+  color: var(--text-muted);
 }
 
 .upload-badge {
@@ -177,7 +177,7 @@
   display: block;
   margin-top: 6rpx;
   font-size: 22rpx;
-  color: #9A8990;
+  color: var(--text-muted);
 }
 
 .form-item {
@@ -204,7 +204,7 @@
   padding: 0 24rpx;
   box-sizing: border-box;
   font-size: 28rpx;
-  background: #FFFDF9;
+  background: var(--surface-color);
   color: var(--text-main);
 }
 
@@ -322,7 +322,7 @@
   border-radius: 22rpx;
   font-size: 24rpx;
   font-weight: 800;
-  color: #9A8990;
+  color: var(--text-muted);
 }
 
 .selected-tip.has-value {
