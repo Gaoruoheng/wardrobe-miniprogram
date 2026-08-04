@@ -28,6 +28,10 @@ test("decorates outfit permissions and three cover slots", () => {
   assert.equal(outfit.coverSlots[1].empty, true);
   assert.notEqual(outfit.coverSlots[0].key, outfit.coverSlots[1].key);
   assert.equal(decorateOutfit({ needsCleanup: true }).needsCleanup, true);
+  assert.equal(
+    decorateOutfit({ items: [{ _id: "busy", wearStatus: "in_use" }] }).items[0].wearStatusText,
+    "使用中"
+  );
 });
 
 test("formats merge summary", () => {

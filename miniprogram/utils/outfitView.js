@@ -1,3 +1,5 @@
+const { decorateItemStatus } = require("./itemStatus.js");
+
 function safeList(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -10,6 +12,7 @@ function coverUrl(item) {
 function decorateOutfit(outfit = {}, wardrobe = {}, openid = "") {
   const itemIds = safeList(outfit.itemIds);
   const coverItems = safeList(outfit.coverItems);
+  const items = safeList(outfit.items).map(item => decorateItemStatus(item));
   const ownerOpenId = wardrobe.ownerOpenId || wardrobe.ownerOpenid || "";
   const canManage = !!openid && (
     outfit.createdByOpenId === openid || ownerOpenId === openid
@@ -23,6 +26,7 @@ function decorateOutfit(outfit = {}, wardrobe = {}, openid = "") {
     createdByName: outfit.createdByName || "衣柜成员",
     itemIds,
     coverItems,
+    items,
     itemCount: itemIds.length,
     canManage,
     needsCleanup: !!outfit.needsCleanup,

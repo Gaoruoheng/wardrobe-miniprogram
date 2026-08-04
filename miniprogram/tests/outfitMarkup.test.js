@@ -86,6 +86,7 @@ test("outfit actions hydrate paged selections and guard duplicate quick saves", 
   const actions = read("miniprogram/utils/indexOutfitActions.js");
   assert.match(actions, /if\s*\(page\.data\.outfitSaving\)\s*return/);
   assert.match(actions, /wardrobeIndexApi\.fetchItemsByIds/);
+  assert.match(actions, /部分衣物正在同步/);
 });
 
 test("outfit panels handle safe areas and partial detail data", () => {

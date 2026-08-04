@@ -135,6 +135,7 @@ async function applyCurrentOutfit(page) {
       outfitId: outfit._id,
       selectedUpdatedText
     });
+    let hydrationFailed = false;
     try {
       const fetchedItems = await wardrobeIndexApi.fetchItemsByIds(
         page.data.wardrobeId,
@@ -146,6 +147,7 @@ async function applyCurrentOutfit(page) {
       );
       page.setData({ allItems });
     } catch (error) {
+      hydrationFailed = true;
       console.error("hydrate applied outfit items failed", error);
     }
     page.setSelection(result.selectedItemIds || [], false);
@@ -156,7 +158,9 @@ async function applyCurrentOutfit(page) {
     });
     wx.showModal({
       title: "已合并到拿衣清单",
-      content: formatApplyResult(result),
+      content: formatApplyResult(result) + (hydrationFailed
+        ? "\n清单已合并，部分衣物正在同步，可重新进入衣柜查看。"
+        : ""),
       showCancel: false,
       confirmText: "知道了"
     });
