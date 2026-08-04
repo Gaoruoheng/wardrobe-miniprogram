@@ -12,10 +12,11 @@
 
   <text class="outfit-panel-note" wx:if="{{outfit.note}}">{{outfit.note}}</text>
   <view class="outfit-panel-warning" wx:if="{{outfit.needsCleanup}}">部分衣物已变化，应用时会自动跳过失效衣物</view>
-  <scroll-view class="outfit-item-strip" scroll-x show-scrollbar="{{false}}" wx:if="{{outfit.items.length}}">
+  <scroll-view class="outfit-item-strip" scroll-x show-scrollbar="{{false}}" wx:if="{{outfit.items && outfit.items.length}}">
     <view class="outfit-item" wx:for="{{outfit.items}}" wx:key="_id">
       <image mode="aspectFill" src="{{item.displayUrl||item.thumbUrl||item.url||item.imageUrl}}"></image>
       <text>{{item.name}}</text>
+      <text class="outfit-item-state {{item.statusClass}}" wx:if="{{item.wearStatusText}}">{{item.wearStatusText}}</text>
     </view>
   </scroll-view>
 

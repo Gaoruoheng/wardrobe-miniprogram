@@ -4,7 +4,8 @@ const assert = require("node:assert/strict");
 const {
   decorateOutfit,
   formatApplyResult,
-  reconcileOutfitItemIds
+  reconcileOutfitItemIds,
+  mergeAppliedOutfitItems
 } = require("../utils/outfitView.js");
 
 test("decorates outfit permissions and three cover slots", () => {
@@ -66,5 +67,15 @@ test("removes deleted outfit items while preserving selected order", () => {
       { _id: "keep-b" }
     ]),
     ["keep-b", "keep-a"]
+  );
+});
+
+test("merges fetched applied items into a paged wardrobe", () => {
+  assert.deepEqual(
+    mergeAppliedOutfitItems(
+      [{ _id: "loaded", name: "旧名称" }],
+      [{ _id: "loaded", name: "新名称" }, { _id: "not-loaded", name: "鞋子" }]
+    ),
+    [{ _id: "loaded", name: "新名称" }, { _id: "not-loaded", name: "鞋子" }]
   );
 });

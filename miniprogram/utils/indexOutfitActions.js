@@ -1,10 +1,16 @@
 const { getVerifiedUser } = require("./auth.js");
 const outfitApi = require("../services/outfitApi.js");
+const wardrobeIndexApi = require("../services/wardrobeIndexApi.js");
+const { normalizeItems } = require("./indexItemView.js");
 const {
   getOutfitCache,
   setOutfitCache
 } = require("./outfitCache.js");
-const { decorateOutfit, formatApplyResult } = require("./outfitView.js");
+const {
+  decorateOutfit,
+  formatApplyResult,
+  mergeAppliedOutfitItems
+} = require("./outfitView.js");
 
 function currentContext(page) {
   const user = getVerifiedUser() || {};
@@ -95,6 +101,7 @@ function closeQuickSaveOutfit(page) {
 }
 
 async function saveQuickOutfit(page, event) {
+  if (page.data.outfitSaving) return;
   const detail = event && event.detail || {};
   const user = getVerifiedUser() || {};
   page.setData({ outfitSaving: true });
@@ -128,6 +135,19 @@ async function applyCurrentOutfit(page) {
       outfitId: outfit._id,
       selectedUpdatedText
     });
+    try {
+      const fetchedItems = await wardrobeIndexApi.fetchItemsByIds(
+        page.data.wardrobeId,
+        result.selectedItemIds || []
+      );
+      const allItems = mergeAppliedOutfitItems(
+        page.data.allItems,
+        normalizeItems(fetchedItems)
+      );
+      page.setData({ allItems });
+    } catch (error) {
+      console.error("hydrate applied outfit items failed", error);
+    }
     page.setSelection(result.selectedItemIds || [], false);
     page.setData({ selectedUpdatedText, showOutfitDetail: false, selectedOutfit: null });
     page.cacheCurrentWardrobeState({

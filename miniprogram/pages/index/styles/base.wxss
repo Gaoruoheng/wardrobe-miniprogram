@@ -1631,7 +1631,7 @@
     box-sizing: border-box;
     left: 12rpx;
     max-height: 72vh;
-    padding: 28rpx 22rpx;
+    padding: 28rpx 22rpx calc(28rpx + env(safe-area-inset-bottom));
     right: 12rpx;
     z-index: 230;
 }
@@ -1801,7 +1801,7 @@
     flex: 1;
     font-size: 28rpx;
     font-weight: 900;
-    height: 78rpx;
+    height: var(--touch-target);
     -webkit-justify-content: center;
     justify-content: center;
 }

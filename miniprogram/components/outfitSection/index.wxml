@@ -22,8 +22,9 @@
       <text class="outfit-warning" wx:if="{{item.needsCleanup}}">需要整理</text>
     </view>
   </scroll-view>
+  <view class="outfit-stale" bindtap="retry" wx:if="{{outfits.length && error}}">套装刷新失败，当前显示上次内容 · 点此重试</view>
 
-  <view class="outfit-loading" wx:elif="{{loading}}">正在整理套装...</view>
-  <view class="outfit-error" bindtap="retry" wx:elif="{{error}}">加载失败，点这里重试</view>
-  <view class="outfit-empty" wx:else>还没有套装，从当前拿衣清单保存一套吧</view>
+  <view class="outfit-loading" wx:elif="{{!outfits.length && loading}}">正在整理套装...</view>
+  <view class="outfit-error" bindtap="retry" wx:elif="{{!outfits.length && error}}">加载失败，点这里重试</view>
+  <view class="outfit-empty" wx:elif="{{!outfits.length}}">还没有套装，从当前拿衣清单保存一套吧</view>
 </view>

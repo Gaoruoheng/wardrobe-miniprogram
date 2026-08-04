@@ -26,3 +26,14 @@ test("item deletion marks affected outfits for cleanup", () => {
   assert.match(source, /version:\s*db\.command\.inc\(1\)/);
   assert.match(source, /mark outfit cleanup failed/);
 });
+
+test("outfit updates compare and increment version inside a transaction", () => {
+  const source = read("cloudfunctions/quickstartFunctions/handlers/outfit.js");
+  const saveSection = source.slice(
+    source.indexOf("async function saveOutfit"),
+    source.indexOf("async function deleteOutfit")
+  );
+  assert.match(saveSection, /db\.runTransaction/);
+  assert.match(saveSection, /OUTFIT_VERSION_CONFLICT/);
+  assert.match(saveSection, /coverItems/);
+});

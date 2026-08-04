@@ -81,3 +81,20 @@ test("task tab silently refreshes outfits when returning from an editor", () => 
   const indexSource = read("miniprogram/pages/index/index.js");
   assert.match(indexSource, /activeTab\s*===\s*2[\s\S]*?loadOutfits\(\{\s*skipCache:\s*true/);
 });
+
+test("outfit actions hydrate paged selections and guard duplicate quick saves", () => {
+  const actions = read("miniprogram/utils/indexOutfitActions.js");
+  assert.match(actions, /if\s*\(page\.data\.outfitSaving\)\s*return/);
+  assert.match(actions, /wardrobeIndexApi\.fetchItemsByIds/);
+});
+
+test("outfit panels handle safe areas and partial detail data", () => {
+  const baseWxss = read("miniprogram/pages/index/styles/base.wxss");
+  const detailWxml = read("miniprogram/components/outfitDetailPanel/index.wxml");
+  const sectionWxml = read("miniprogram/components/outfitSection/index.wxml");
+  assert.match(baseWxss, /\.pick-panel[\s\S]*?env\(safe-area-inset-bottom\)/);
+  assert.match(baseWxss, /\.pick-action-clear,.pick-action-outfit,.pick-action-save[\s\S]*?height:\s*var\(--touch-target\)/);
+  assert.match(detailWxml, /outfit\.items\s*&&\s*outfit\.items\.length/);
+  assert.match(detailWxml, /wearStatusText/);
+  assert.match(sectionWxml, /outfit-stale/);
+});

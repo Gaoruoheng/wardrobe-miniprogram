@@ -113,47 +113,68 @@ async function saveOutfit(event) {
   if (!await validateItems(normalized.itemIds, wardrobeId)) {
     return { success: false, code: "OUTFIT_ITEM_NOT_FOUND" };
   }
+  const coverItems = await fetchItemsByIds(normalized.coverItemIds, wardrobeId);
 
   const outfitId = normalizeText(value(event, "outfitId"));
   const now = Date.now();
   if (outfitId) {
-    const outfitResult = await getOutfitDocument(outfitId, wardrobeId);
-    if (!outfitResult.ok) return { success: false, code: outfitResult.code };
-
-    const current = outfitResult.outfit;
-    if (!canManageOutfit(current, access.wardrobe, openid)) {
-      return { success: false, code: "FORBIDDEN" };
-    }
-
     const version = Number(value(event, "version"));
-    if (!Number.isInteger(version) || version !== Number(current.version || 1)) {
-      return { success: false, code: "OUTFIT_VERSION_CONFLICT" };
+    try {
+      const updated = await db.runTransaction(async transaction => {
+        let current = null;
+        try {
+          const result = await transaction.collection("wardrobe_outfits").doc(outfitId).get();
+          current = result.data;
+        } catch (error) {}
+
+        if (!current || current.wardrobeId !== wardrobeId) {
+          const error = new Error("OUTFIT_NOT_FOUND");
+          error.code = "OUTFIT_NOT_FOUND";
+          throw error;
+        }
+        if (!canManageOutfit(current, access.wardrobe, openid)) {
+          const error = new Error("FORBIDDEN");
+          error.code = "FORBIDDEN";
+          throw error;
+        }
+        if (!Number.isInteger(version) || version !== Number(current.version || 1)) {
+          const error = new Error("OUTFIT_VERSION_CONFLICT");
+          error.code = "OUTFIT_VERSION_CONFLICT";
+          throw error;
+        }
+
+        const nextVersion = Number(current.version || 1) + 1;
+        await transaction.collection("wardrobe_outfits").doc(outfitId).update({
+          data: {
+            name: normalized.name,
+            note: normalized.note,
+            itemIds: normalized.itemIds,
+            coverItemIds: normalized.coverItemIds,
+            needsCleanup: false,
+            updateTime: db.serverDate(),
+            version: nextVersion
+          }
+        });
+        return {
+          ...current,
+          ...normalized,
+          _id: outfitId,
+          needsCleanup: false,
+          updateTime: now,
+          version: nextVersion
+        };
+      });
+
+      return {
+        success: true,
+        outfit: {
+          ...withPermissions(updated, access.wardrobe, openid),
+          coverItems
+        }
+      };
+    } catch (error) {
+      return { success: false, code: error.code || "OUTFIT_SAVE_FAILED" };
     }
-
-    const nextVersion = Number(current.version || 1) + 1;
-    await db.collection("wardrobe_outfits").doc(outfitId).update({
-      data: {
-        name: normalized.name,
-        note: normalized.note,
-        itemIds: normalized.itemIds,
-        coverItemIds: normalized.coverItemIds,
-        needsCleanup: false,
-        updateTime: db.serverDate(),
-        version: nextVersion
-      }
-    });
-
-    return {
-      success: true,
-      outfit: withPermissions({
-        ...current,
-        ...normalized,
-        _id: outfitId,
-        needsCleanup: false,
-        updateTime: now,
-        version: nextVersion
-      }, access.wardrobe, openid)
-    };
   }
 
   const countResult = await db.collection("wardrobe_outfits").where({ wardrobeId }).count();
@@ -182,7 +203,8 @@ async function saveOutfit(event) {
       ...outfit,
       _id: addResult._id,
       createTime: now,
-      updateTime: now
+      updateTime: now,
+      coverItems
     }, access.wardrobe, openid)
   };
 }

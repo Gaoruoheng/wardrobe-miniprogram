@@ -144,3 +144,18 @@
   color: #9a5f70;
   font-weight: 900;
 }
+
+.outfit-stale {
+  display: flex;
+  min-height: var(--touch-target);
+  margin-top: 14rpx;
+  padding: 12rpx 18rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20rpx;
+  background: #fff2c9;
+  color: #795522;
+  font-size: 21rpx;
+  font-weight: 900;
+  text-align: center;
+}

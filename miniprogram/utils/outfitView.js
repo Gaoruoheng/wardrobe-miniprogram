@@ -66,8 +66,27 @@ function reconcileOutfitItemIds(itemIds, items) {
   return safeList(itemIds).filter(id => available.has(id));
 }
 
+function mergeAppliedOutfitItems(currentItems, fetchedItems) {
+  const fetchedMap = new Map(
+    safeList(fetchedItems)
+      .filter(item => item && item._id)
+      .map(item => [item._id, item])
+  );
+  const result = safeList(currentItems)
+    .filter(item => item && item._id)
+    .map(item => fetchedMap.get(item._id) || item);
+  const existing = new Set(result.map(item => item._id));
+  safeList(fetchedItems).forEach(item => {
+    if (!item || !item._id || existing.has(item._id)) return;
+    existing.add(item._id);
+    result.push(item);
+  });
+  return result;
+}
+
 module.exports = {
   decorateOutfit,
   formatApplyResult,
-  reconcileOutfitItemIds
+  reconcileOutfitItemIds,
+  mergeAppliedOutfitItems
 };
