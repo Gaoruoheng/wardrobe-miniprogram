@@ -57,6 +57,20 @@ test("merges without replacing current selection", () => {
   assert.deepEqual(result.storedIds, ["stored"]);
 });
 
+test("returns unchanged selection when every outfit item is skipped", () => {
+  const result = buildOutfitMerge(
+    ["duplicate"],
+    ["duplicate", "busy", "missing"],
+    [{ _id: "busy", wearStatus: "in_use" }]
+  );
+
+  assert.deepEqual(result.selectedItemIds, ["duplicate"]);
+  assert.deepEqual(result.addedIds, []);
+  assert.equal(result.duplicateIds.length, 1);
+  assert.equal(result.inUseIds.length, 1);
+  assert.equal(result.missingIds.length, 1);
+});
+
 test("creator and wardrobe owner can manage outfit", () => {
   const outfit = { createdByOpenId: "creator" };
   const wardrobe = { ownerOpenId: "owner" };

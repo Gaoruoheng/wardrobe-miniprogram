@@ -5,7 +5,8 @@ const { fetchItemsByIds } = require("../shared/items.js");
 const {
   MAX_OUTFITS_PER_WARDROBE,
   normalizeOutfitInput,
-  canManageOutfit
+  canManageOutfit,
+  buildOutfitMerge
 } = require("../shared/outfits.js");
 
 function value(event, key) {
@@ -201,9 +202,60 @@ async function deleteOutfit(event) {
   return { success: true, outfitId };
 }
 
+async function applyOutfit(event) {
+  const { wardrobeId, openid, access } = await requireAccess(event);
+  if (!access.ok) return { success: false, code: access.code };
+
+  const outfitId = normalizeText(value(event, "outfitId"));
+  if (!outfitId) return { success: false, code: "MISSING_OUTFIT_ID" };
+
+  try {
+    const merge = await db.runTransaction(async transaction => {
+      const outfitResult = await transaction.collection("wardrobe_outfits").doc(outfitId).get();
+      const outfit = outfitResult.data;
+      if (!outfit || outfit.wardrobeId !== wardrobeId) {
+        const error = new Error("OUTFIT_NOT_FOUND");
+        error.code = "OUTFIT_NOT_FOUND";
+        throw error;
+      }
+
+      const wardrobeResult = await transaction.collection("wardrobe_hubs").doc(wardrobeId).get();
+      const wardrobe = wardrobeResult.data;
+      const items = [];
+      for (const itemId of outfit.itemIds || []) {
+        try {
+          const itemResult = await transaction.collection("wardrobe_items").doc(itemId).get();
+          if (itemResult.data && itemResult.data.wardrobeId === wardrobeId) {
+            items.push(itemResult.data);
+          }
+        } catch (err) {}
+      }
+
+      const result = buildOutfitMerge(
+        wardrobe.selectedItemIds || [],
+        outfit.itemIds || [],
+        items
+      );
+      await transaction.collection("wardrobe_hubs").doc(wardrobeId).update({
+        data: {
+          selectedItemIds: result.selectedItemIds,
+          selectedUpdatedAt: db.serverDate(),
+          selectedUpdatedText: normalizeText(value(event, "selectedUpdatedText"))
+        }
+      });
+      return result;
+    });
+
+    return { success: true, ...merge, appliedByOpenId: openid };
+  } catch (error) {
+    return { success: false, code: error.code || "OUTFIT_APPLY_FAILED" };
+  }
+}
+
 module.exports = {
   listOutfits,
   getOutfit,
   saveOutfit,
-  deleteOutfit
+  deleteOutfit,
+  applyOutfit
 };

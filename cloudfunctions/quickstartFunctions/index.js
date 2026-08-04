@@ -26,7 +26,8 @@ const {
   listOutfits,
   getOutfit,
   saveOutfit,
-  deleteOutfit
+  deleteOutfit,
+  applyOutfit
 } = require("./handlers/outfit.js");
 
 const handlers = {
@@ -52,7 +53,8 @@ const handlers = {
   listOutfits,
   getOutfit,
   saveOutfit,
-  deleteOutfit
+  deleteOutfit,
+  applyOutfit
 };
 
 exports.main = async (event = {}) => {

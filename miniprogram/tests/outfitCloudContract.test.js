@@ -6,9 +6,9 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "../..");
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
 
-test("cloud entry registers outfit CRUD operations", () => {
+test("cloud entry registers outfit operations", () => {
   const source = read("cloudfunctions/quickstartFunctions/index.js");
-  ["listOutfits", "getOutfit", "saveOutfit", "deleteOutfit"].forEach(name => {
+  ["listOutfits", "getOutfit", "saveOutfit", "deleteOutfit", "applyOutfit"].forEach(name => {
     assert.match(source, new RegExp("\\b" + name + "\\b"));
   });
 });
