@@ -1,5 +1,6 @@
 Component({
   properties: {
+    skin: { type: String, value: "" },
     show: { type: Boolean, value: false },
     outfit: { type: Object, value: null },
     applying: { type: Boolean, value: false }

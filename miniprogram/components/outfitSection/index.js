@@ -1,5 +1,6 @@
 Component({
   properties: {
+    skin: { type: String, value: "" },
     outfits: { type: Array, value: [] },
     loading: { type: Boolean, value: false },
     error: { type: Boolean, value: false }

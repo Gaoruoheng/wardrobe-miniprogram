@@ -38,3 +38,21 @@ test("shared theme contract and design documentation exist", () => {
   });
   assert.equal(fs.existsSync(designPath), true, "DESIGN.md should document the theme contract");
 });
+
+test("isolated outfit components receive and consume the active skin", () => {
+  const page = read("miniprogram/pages/index/index.wxml");
+  const components = ["outfitSection", "outfitDetailPanel", "outfitQuickSave"];
+
+  assert.equal((page.match(/skin="\{\{selectedSkin\}\}"/g) || []).length, 3);
+  components.forEach(component => {
+    const base = `miniprogram/components/${component}/index`;
+    const logic = read(`${base}.js`);
+    const template = read(`${base}.wxml`);
+    const styles = read(`${base}.wxss`);
+
+    assert.match(logic, /skin:\s*\{\s*type:\s*String/);
+    assert.match(template, /theme-scope skin-\{\{skin\}\}/);
+    assert.match(styles, /@import\s+["']\.\.\/\.\.\/styles\/theme-tokens\.wxss["']/);
+    assert.match(styles, /var\(--skin-(?:surface|ink|accent|border|shadow)\)/);
+  });
+});

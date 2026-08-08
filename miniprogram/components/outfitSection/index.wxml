@@ -1,4 +1,4 @@
-<view class="outfit-section">
+<view class="outfit-section theme-scope skin-{{skin}}">
   <view class="outfit-section-head">
     <view>
       <text class="outfit-section-title">我的套装</text>

@@ -1,7 +1,10 @@
+@import "../../styles/theme-tokens.wxss";
+
 .outfit-section {
   margin: 34rpx 0 30rpx;
   padding-top: 30rpx;
-  border-top: 2rpx dashed rgba(244, 186, 200, 0.72);
+  border-top: 2rpx dashed var(--skin-border);
+  color: var(--skin-ink);
 }
 
 .outfit-section-head {
@@ -17,14 +20,14 @@
 }
 
 .outfit-section-title {
-  color: #5f5157;
+  color: var(--skin-ink);
   font-size: 31rpx;
   font-weight: 900;
 }
 
 .outfit-section-sub {
   margin-top: 6rpx;
-  color: #7d6a70;
+  color: var(--skin-muted);
   font-size: 21rpx;
 }
 
@@ -38,10 +41,10 @@
 
 .outfit-create {
   padding: 12rpx 20rpx;
-  border: 2rpx solid #f4bac8;
+  border: 2rpx solid var(--skin-border);
   border-radius: 999rpx;
-  background: #fffdf9;
-  color: #a66a79;
+  background: var(--skin-surface);
+  color: var(--skin-accent);
   font-size: 23rpx;
   font-weight: 900;
 }
@@ -61,10 +64,10 @@
   flex-direction: column;
   vertical-align: top;
   white-space: normal;
-  border: 3rpx solid #6b5960;
+  border: 3rpx solid var(--skin-border);
   border-radius: 28rpx;
-  background: linear-gradient(145deg, #fffdf9, #fff0f5);
-  box-shadow: 0 7rpx 0 #f4bac8, 0 14rpx 24rpx rgba(107, 89, 96, 0.12);
+  background: var(--skin-surface);
+  box-shadow: var(--skin-shadow);
 }
 
 .outfit-cover {
@@ -73,14 +76,14 @@
   margin-bottom: 15rpx;
   overflow: hidden;
   border-radius: 20rpx;
-  background: #fff8e5;
+  background: var(--skin-surface-soft);
 }
 
 .outfit-cover-slot {
   position: relative;
   flex: 1;
   min-width: 0;
-  border-right: 2rpx solid rgba(107, 89, 96, 0.12);
+  border-right: 2rpx solid var(--skin-border);
 }
 
 .outfit-cover-slot:last-child { border-right: 0; }
@@ -90,15 +93,15 @@
 .outfit-cover-dot {
   width: 18rpx;
   height: 18rpx;
-  border: 3rpx solid #e8c8d2;
+  border: 3rpx solid var(--skin-border);
   border-radius: 50%;
-  background: #fffdf9;
+  background: var(--skin-surface);
 }
 
 .outfit-name {
   max-width: 100%;
   overflow: hidden;
-  color: #5f5157;
+  color: var(--skin-ink);
   font-size: 26rpx;
   font-weight: 900;
   text-overflow: ellipsis;
@@ -107,7 +110,7 @@
 
 .outfit-meta {
   margin-top: 7rpx;
-  color: #7d6a70;
+  color: var(--skin-muted);
   font-size: 20rpx;
 }
 
@@ -127,10 +130,10 @@
 .outfit-error {
   min-height: 104rpx;
   padding: 28rpx 24rpx;
-  border: 2rpx dashed #f4bac8;
+  border: 2rpx dashed var(--skin-border);
   border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.66);
-  color: #7d6a70;
+  background: var(--skin-surface);
+  color: var(--skin-muted);
   font-size: 23rpx;
   line-height: 1.5;
   text-align: center;

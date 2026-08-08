@@ -1,5 +1,6 @@
 Component({
   properties: {
+    skin: { type: String, value: "" },
     show: { type: Boolean, value: false },
     saving: { type: Boolean, value: false },
     itemCount: { type: Number, value: 0 }

@@ -1,5 +1,5 @@
-<view class="outfit-panel-mask" wx:if="{{show}}" bindtap="closePanel"></view>
-<view class="outfit-panel" wx:if="{{show}}" catchtap="noop">
+<view class="outfit-panel-mask theme-scope skin-{{skin}}" wx:if="{{show}}" bindtap="closePanel"></view>
+<view class="outfit-panel theme-scope skin-{{skin}}" wx:if="{{show}}" catchtap="noop">
   <view class="outfit-panel-head">
     <view class="outfit-panel-copy">
       <text class="outfit-panel-title">{{outfit.name}}</text>

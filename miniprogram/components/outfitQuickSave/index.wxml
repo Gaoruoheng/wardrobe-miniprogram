@@ -1,5 +1,5 @@
-<view class="quick-save-mask" wx:if="{{show}}" bindtap="closePanel"></view>
-<view class="quick-save-panel" wx:if="{{show}}" catchtap="noop">
+<view class="quick-save-mask theme-scope skin-{{skin}}" wx:if="{{show}}" bindtap="closePanel"></view>
+<view class="quick-save-panel theme-scope skin-{{skin}}" wx:if="{{show}}" catchtap="noop">
   <view class="quick-save-head">
     <view>
       <text class="quick-save-title">存为套装</text>
