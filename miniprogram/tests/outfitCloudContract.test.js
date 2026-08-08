@@ -13,6 +13,19 @@ test("cloud entry registers outfit operations", () => {
   });
 });
 
+test("outfit access bootstraps its collection once per cloud instance", () => {
+  const source = read("cloudfunctions/quickstartFunctions/handlers/outfit.js");
+  const accessSection = source.slice(
+    source.indexOf("async function requireAccess"),
+    source.indexOf("async function getOutfitDocument")
+  );
+
+  assert.match(source, /let\s+outfitCollectionReady\s*=\s*null/);
+  assert.match(source, /if\s*\(!outfitCollectionReady\)/);
+  assert.match(source, /db\.createCollection\("wardrobe_outfits"\)/);
+  assert.match(accessSection, /if\s*\(access\.ok\)\s*await\s+ensureOutfitCollection\(\)/);
+});
+
 test("wardrobe deletion removes outfit documents", () => {
   const source = read("cloudfunctions/quickstartFunctions/handlers/wardrobe.js");
   assert.match(source, /getAllByWardrobe\("wardrobe_outfits"/);

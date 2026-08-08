@@ -9,6 +9,15 @@ const {
   buildOutfitMerge
 } = require("../shared/outfits.js");
 
+let outfitCollectionReady = null;
+
+async function ensureOutfitCollection() {
+  if (!outfitCollectionReady) {
+    outfitCollectionReady = db.createCollection("wardrobe_outfits").catch(() => undefined);
+  }
+  await outfitCollectionReady;
+}
+
 function value(event, key) {
   return event[key] !== undefined ? event[key] : (event.data || {})[key];
 }
@@ -18,6 +27,7 @@ async function requireAccess(event) {
   const context = cloud.getWXContext();
   const openid = context.OPENID;
   const access = await getWardrobeForUser(wardrobeId, openid);
+  if (access.ok) await ensureOutfitCollection();
   return { wardrobeId, openid, access };
 }
 
