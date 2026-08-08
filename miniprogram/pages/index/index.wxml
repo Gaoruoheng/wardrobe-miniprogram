@@ -80,10 +80,15 @@
             <text class="notice-text">点右侧小圆脸加入拿衣清单，保存后两个人都能看到</text>
         </view>
         <view class="tabs-row">
-            <view bindtap="switchTab" class="tab-item {{activeTab===0?'active':''}}" data-tab="0">菜单 {{count}}</view>
-            <view bindtap="switchTab" class="tab-item {{activeTab===1?'active':''}}" data-tab="1">计划</view>
-            <view bindtap="switchTab" class="tab-item {{activeTab===2?'active':''}}" data-tab="2">任务 {{taskBadgeCount}}</view>
-            <view bindtap="switchTab" class="tab-item {{activeTab===3?'active':''}}" data-tab="3">关于</view>
+            <scroll-view class="tabs-scroll" scroll-x show-scrollbar="{{false}}">
+                <view class="tabs-scroll-inner">
+                    <view bindtap="switchTab" class="tab-item {{activeTab===0?'active':''}}" data-tab="0">菜单 {{count}}</view>
+                    <view bindtap="switchTab" class="tab-item {{activeTab===1?'active':''}}" data-tab="1">套装</view>
+                    <view bindtap="switchTab" class="tab-item {{activeTab===2?'active':''}}" data-tab="2">计划</view>
+                    <view bindtap="switchTab" class="tab-item {{activeTab===3?'active':''}}" data-tab="3">任务 {{taskBadgeCount}}</view>
+                    <view bindtap="switchTab" class="tab-item {{activeTab===4?'active':''}}" data-tab="4">关于</view>
+                </view>
+            </scroll-view>
             <view bindtap="toggleSearch" class="search-mini">搜索</view>
         </view>
         <view class="search-box" wx:if="{{showSearch}}">
@@ -220,7 +225,18 @@
             </view>
         </view>
     </view>
-    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===1}}">
+    <scroll-view scroll-y class="tab-content outfit-tab-content" style="height:100%" wx:if="{{activeTab===1}}">
+        <outfit-section
+            outfits="{{outfits}}"
+            loading="{{outfitsLoading}}"
+            error="{{outfitLoadError}}"
+            bind:create="goCreateOutfit"
+            bind:open="openOutfitDetail"
+            bind:retry="loadOutfits"
+        ></outfit-section>
+        <view style="height:200rpx;"></view>
+    </scroll-view>
+    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===2}}">
         <view class="section-header">
             <text class="section-title">我的计划</text>
             <view bindtap="togglePlanInput" class="add-mini-btn kawaii-btn">+</view>
@@ -243,7 +259,7 @@
         </view>
         <view style="height:200rpx;"></view>
     </scroll-view>
-    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===2}}">
+    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===3}}">
         <view class="section-header">
             <text class="section-title">我的任务</text>
             <view bindtap="toggleTaskInput" class="add-mini-btn kawaii-btn">+</view>
@@ -264,14 +280,6 @@
             </view>
             <view class="package-open">打开</view>
         </view>
-        <outfit-section
-            outfits="{{outfits}}"
-            loading="{{outfitsLoading}}"
-            error="{{outfitLoadError}}"
-            bind:create="goCreateOutfit"
-            bind:open="openOutfitDetail"
-            bind:retry="loadOutfits"
-        ></outfit-section>
         <view class="input-row" wx:if="{{showTaskInput}}">
             <input bindinput="onTaskInput" class="kawaii-input-inline" placeholder="新任务" value="{{newTaskText}}"></input>
             <view bindtap="addTask" class="confirm-btn kawaii-btn">OK</view>
@@ -290,7 +298,7 @@
         </view>
         <view style="height:200rpx;"></view>
     </scroll-view>
-    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===3}}">
+    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===4}}">
         <view class="about-card kawaii-card">
             <text class="about-name">{{wardrobeName}}</text>
             <text class="about-desc">{{about.desc}}</text>

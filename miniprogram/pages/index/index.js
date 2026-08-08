@@ -136,7 +136,7 @@ Page({
     this.setData({ isAdminViewing: isAdminModeActive() });
     if (this.data.wardrobeId) {
       this.fetchData({ silent: this._hasIndexCache || this.hasWardrobeContent() });
-      if (this.data.activeTab === 2 && this._outfitsLoaded) {
+      if (this.data.activeTab === 1 && this._outfitsLoaded) {
         this.loadOutfits({ skipCache: true, silent: true });
       }
     }
@@ -296,7 +296,7 @@ Page({
         this.buildGrouped(this.data.categoryNames, this.data.allItems, { resetActive: true });
       }
       if (tab === 0) this.scheduleSectionMeasure();
-      if (tab === 2 && !this._outfitsLoaded) this.loadOutfits();
+      if (tab === 1 && !this._outfitsLoaded) this.loadOutfits();
     });
   },
 

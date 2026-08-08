@@ -44,11 +44,17 @@ function assertWxmlNesting(source) {
   assert.deepEqual(stack, [], "WXML has unclosed tags");
 }
 
-test("task tab registers outfit components and quick-save entry", () => {
+test("standalone outfit tab registers components and quick-save entry", () => {
   const indexWxml = read("miniprogram/pages/index/index.wxml");
   const indexJson = read("miniprogram/pages/index/index.json");
+  const outfitTab = indexWxml.match(/<scroll-view[^>]*wx:if="\{\{activeTab===1\}\}"[^>]*>([\s\S]*?)<\/scroll-view>/);
+  const taskTab = indexWxml.match(/<scroll-view[^>]*wx:if="\{\{activeTab===3\}\}"[^>]*>([\s\S]*?)<\/scroll-view>/);
 
-  assert.match(indexWxml, /<outfit-section/);
+  assert.match(indexWxml, /data-tab="0"[\s\S]*data-tab="1">套装[\s\S]*data-tab="2"[\s\S]*data-tab="3"[\s\S]*data-tab="4"/);
+  assert.ok(outfitTab, "standalone outfit tab should use activeTab 1");
+  assert.match(outfitTab[1], /<outfit-section/);
+  assert.ok(taskTab, "task tab should use activeTab 3");
+  assert.doesNotMatch(taskTab[1], /<outfit-section/);
   assert.match(indexWxml, /<outfit-detail-panel/);
   assert.match(indexWxml, /<outfit-quick-save/);
   assert.match(indexWxml, /bindtap="openQuickSaveOutfit"/);
@@ -77,9 +83,19 @@ test("dedicated outfit editor exposes inputs filters selection and save", () => 
   assertWxmlNesting(editorWxml);
 });
 
-test("task tab silently refreshes outfits when returning from an editor", () => {
+test("standalone outfit tab loads and silently refreshes outfits", () => {
   const indexSource = read("miniprogram/pages/index/index.js");
-  assert.match(indexSource, /activeTab\s*===\s*2[\s\S]*?loadOutfits\(\{\s*skipCache:\s*true/);
+  assert.match(indexSource, /activeTab\s*===\s*1[\s\S]{0,160}?loadOutfits\(\{\s*skipCache:\s*true/);
+  assert.match(indexSource, /tab\s*===\s*1\s*&&\s*!this\._outfitsLoaded\)\s*this\.loadOutfits\(\)/);
+});
+
+test("top navigation scrolls without moving the search action", () => {
+  const indexWxml = read("miniprogram/pages/index/index.wxml");
+  const baseWxss = read("miniprogram/pages/index/styles/base.wxss");
+  assert.match(indexWxml, /<scroll-view[^>]*class="tabs-scroll"[^>]*scroll-x[^>]*>[\s\S]*class="tabs-scroll-inner"[\s\S]*<\/scroll-view>\s*<view bindtap="toggleSearch" class="search-mini">/);
+  assert.match(baseWxss, /\.tabs-scroll\s*\{[\s\S]*?flex:\s*1/);
+  assert.match(baseWxss, /\.tab-item\s*\{[\s\S]*?min-height:\s*var\(--touch-target\)/);
+  assert.match(baseWxss, /\.search-mini\s*\{[\s\S]*?min-height:\s*var\(--touch-target\)/);
 });
 
 test("outfit actions hydrate paged selections and guard duplicate quick saves", () => {
