@@ -379,8 +379,16 @@
 }
 
 .app-container.skin-princess-castle .cat-count {
-    color: #947da7;
+    color: var(--skin-muted);
     font-weight: 900;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-container.skin-princess-castle .side-moon-orbit,
+    .app-container.skin-princess-castle .fab-add {
+        -webkit-animation: none;
+        animation: none;
+    }
 }
 
 .app-container.skin-princess-castle .cloth-row {
@@ -1147,4 +1155,45 @@
 .app-container.skin-princess-castle .fab-star-two {
     right: 24rpx;
     top: 66rpx;
+}
+
+/* Final quiet-surface pass. */
+.app-container.skin-princess-castle .profile-card,
+.app-container.skin-princess-castle .search-box,
+.app-container.skin-princess-castle .pick-package-card,
+.app-container.skin-princess-castle .todo-item,
+.app-container.skin-princess-castle .about-card {
+    background: var(--skin-surface);
+    border-color: var(--skin-border);
+    box-shadow: var(--skin-shadow);
+}
+
+.app-container.skin-princess-castle .cloth-row {
+    background: var(--skin-surface);
+    border-color: var(--skin-border);
+    box-shadow: var(--skin-shadow);
+}
+
+.app-container.skin-princess-castle .cat-title {
+    background: var(--skin-surface-soft);
+    border-color: var(--skin-border);
+    box-shadow: none;
+}
+
+.app-container.skin-princess-castle .side-item {
+    background: var(--skin-surface);
+    border-color: var(--skin-border);
+    box-shadow: none;
+}
+
+.app-container.skin-princess-castle .side-item.active {
+    background: var(--skin-accent-soft);
+    border-color: var(--skin-accent);
+    box-shadow: inset 6rpx 0 0 var(--skin-gold);
+}
+
+.app-container.skin-princess-castle .cloth-card-watermark,
+.app-container.skin-princess-castle .cat-title-cloud-mark,
+.app-container.skin-princess-castle .side-lantern-glow {
+    display: none;
 }

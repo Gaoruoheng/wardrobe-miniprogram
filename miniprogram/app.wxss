@@ -182,7 +182,14 @@ button:active {
 .skin-princess-castle .cloth-color,
 .skin-princess-castle .empty-text,
 .skin-princess-castle .upload-sub {
-  color: #8a7499;
+  color: var(--skin-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  .kawaii-back-icon {
+    transition-duration: 0.01ms;
+  }
 }
 
 .skin-princess-castle .eyebrow,

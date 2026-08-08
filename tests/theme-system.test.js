@@ -56,3 +56,44 @@ test("isolated outfit components receive and consume the active skin", () => {
     assert.match(styles, /var\(--skin-(?:surface|ink|accent|border|shadow)\)/);
   });
 });
+
+test("primary controls meet touch, contrast, and motion preferences", () => {
+  const indexTemplate = read("miniprogram/pages/index/index.wxml");
+  const indexBase = read("miniprogram/pages/index/styles/base.wxss");
+  const moon = read("miniprogram/pages/index/styles/moon-polish.wxss");
+  const homeTemplate = read("miniprogram/pages/home/home.wxml");
+  const homeBase = read("miniprogram/pages/home/styles/base.wxss");
+  const homeSkin = read("miniprogram/pages/home/styles/princess-cards.wxss");
+  const app = read("miniprogram/app.wxss");
+
+  assert.match(indexTemplate, /class="header-action-hit share-button"/);
+  assert.match(indexTemplate, /class="header-action-hit"[^>]*bindtap="goManage"|bindtap="goManage"[^>]*class="header-action-hit"/);
+  assert.match(indexBase, /\.header-action-hit\s*\{[\s\S]*?min-height:\s*var\(--touch-target\)/);
+  assert.match(homeTemplate, /class="skin-switch-hit"/);
+  assert.match(homeBase, /\.skin-switch-hit\s*\{[\s\S]*?min-height:\s*var\(--touch-target\)/);
+
+  assert.doesNotMatch(app, /#8a7499/i);
+  assert.doesNotMatch(indexBase, /#b59ba5/i);
+  assert.doesNotMatch(moon, /#947da7/i);
+  [app, moon, homeSkin].forEach(styles => assert.match(styles, /@media\s*\(prefers-reduced-motion:\s*reduce\)/));
+});
+
+test("moon skin keeps signature art while routine surfaces stay quiet", () => {
+  const palace = read("miniprogram/pages/index/styles/moon-palace.wxss");
+  const polish = read("miniprogram/pages/index/styles/moon-polish.wxss");
+  const finalPolish = polish.split("/* Final quiet-surface pass. */")[1] || "";
+  const selectors = styles => new Set(
+    [...styles.matchAll(/(^|\})\s*([^@{}][^{}]*)\{/gm)]
+      .flatMap(match => match[2].split(",").map(value => value.trim()))
+      .filter(Boolean)
+  );
+  const palaceSelectors = selectors(palace);
+  const polishSelectors = selectors(polish);
+  const duplicateCount = [...palaceSelectors].filter(selector => polishSelectors.has(selector)).length;
+
+  assert.ok(duplicateCount <= 25, `expected at most 25 cross-file duplicate selectors, got ${duplicateCount}`);
+  assert.match(finalPolish, /\.cloth-card-watermark[\s\S]*?display:\s*none/);
+  assert.match(finalPolish, /\.cat-title-cloud-mark[\s\S]*?display:\s*none/);
+  assert.match(finalPolish, /\.cloth-row[\s\S]*?background:\s*var\(--skin-surface\)/);
+  assert.match(finalPolish, /\.cloth-row[\s\S]*?box-shadow:\s*var\(--skin-shadow\)/);
+});

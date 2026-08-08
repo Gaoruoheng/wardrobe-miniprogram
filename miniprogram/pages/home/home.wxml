@@ -110,9 +110,11 @@
             <text class="section-subtitle">{{selectedSkin == 'princess-castle' ? '每个衣柜都是一间月光衣阁' : '每个衣柜都是一个独立的小包裹'}}</text>
         </view>
         <view class="section-actions">
-            <view bindtap="openSkinSheet" class="skin-switch">
-                <text class="skin-switch-star">✦</text>
-                <text>换肤</text>
+            <view bindtap="openSkinSheet" class="skin-switch-hit">
+                <view class="skin-switch">
+                    <text class="skin-switch-star">✦</text>
+                    <text>换肤</text>
+                </view>
             </view>
             <text class="section-count">{{wardrobeCount}} 个</text>
         </view>

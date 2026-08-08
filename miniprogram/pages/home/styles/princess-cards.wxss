@@ -780,3 +780,11 @@
     justify-content: center;
     z-index: 10;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .skin-princess-castle .dream-shimmer,
+    .skin-princess-castle .dream-glow,
+    .skin-princess-castle .dream-particle {
+        animation: none;
+    }
+}

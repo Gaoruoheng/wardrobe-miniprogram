@@ -271,25 +271,11 @@
     color: #5d4279;
 }
 
-.app-container.skin-princess-castle .side-item.active::before {
-    display: none;
-}
-
 .app-container.skin-princess-castle .side-rank {
     background: linear-gradient(180deg, #ffd6e7, #ff9abc);
     border: 2rpx solid rgba(255,255,255,.82);
     box-shadow: 0 6rpx 14rpx rgba(255,154,188,.24);
     color: #fff;
-}
-
-.app-container.skin-princess-castle .side-item.active .side-rank {
-    background: linear-gradient(180deg, #fff3c9, #d8b45b);
-    color: #5d4279;
-}
-
-.app-container.skin-princess-castle .side-name {
-    color: inherit;
-    font-weight: 900;
 }
 
 .app-container.skin-princess-castle .item-list {
@@ -312,10 +298,6 @@
 .app-container.skin-princess-castle .cat-title-dot {
     background: linear-gradient(180deg, #ffb7c5, #ffe58b);
     box-shadow: 0 0 0 8rpx rgba(255,183,197,.18);
-}
-
-.app-container.skin-princess-castle .cat-count {
-    color: #b78d9d;
 }
 
 .app-container.skin-princess-castle .empty-cat {
@@ -342,10 +324,6 @@
     border: 1rpx solid rgba(207,169,232,.28);
     border-radius: 26rpx;
     box-shadow: 0 9rpx 20rpx rgba(81,64,153,.08);
-}
-
-.app-container.skin-princess-castle .cloth-row::before {
-    background: linear-gradient(180deg, rgba(255,183,197,.72), rgba(255,229,139,.52));
 }
 
 .app-container.skin-princess-castle .fab-add {
@@ -433,15 +411,6 @@
         linear-gradient(180deg, rgba(255,255,255,.94), rgba(248,236,255,.78));
     border-color: rgba(216,180,90,.42);
     box-shadow: 0 12rpx 24rpx rgba(90,61,135,.12), inset 6rpx 0 0 rgba(216,180,90,.58);
-}
-
-.app-container.skin-princess-castle .side-item.active .side-rank {
-    background: linear-gradient(180deg, #b989d6, #e9c56a);
-    color: #fff;
-}
-
-.app-container.skin-princess-castle .side-item.active .side-name {
-    color: #4b356e;
 }
 
 .app-container.skin-princess-castle .item-list {
@@ -555,15 +524,6 @@
 .app-container.skin-princess-castle .cloth-drag-handle {
     position: relative;
     z-index: 2;
-}
-
-.app-container.skin-princess-castle .cloth-name {
-    color: #4b356e;
-    font-weight: 900;
-}
-
-.app-container.skin-princess-castle .cloth-sub {
-    color: #7b6a8f;
 }
 
 .app-container.skin-princess-castle .cloth-select-btn {

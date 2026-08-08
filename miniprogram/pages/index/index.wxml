@@ -72,8 +72,12 @@
                 <text class="closet-title">{{wardrobeName}}</text>
                 <text class="closet-subtitle">给她准备今天要拿的衣服</text>
             </view>
-            <button class="invite-text share-button" open-type="share">分享</button>
-            <view bindtap="goManage" class="settings-icon">设置</view>
+            <button class="header-action-hit share-button" open-type="share">
+                <text class="invite-text header-action-face">分享</text>
+            </button>
+            <view bindtap="goManage" class="header-action-hit">
+                <text class="settings-icon header-action-face">设置</text>
+            </view>
         </view>
         <view class="notice-row">
             <view class="notice-face"></view>
