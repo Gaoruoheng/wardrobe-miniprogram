@@ -1,8 +1,4 @@
-const {
-  calcTaskBadgeCount,
-  uniqueIds,
-  buildSelectedItemsState
-} = require("./selectionState.js");
+const { uniqueIds, buildSelectedItemsState } = require("./selectionState.js");
 const wardrobeIndexApi = require("../services/wardrobeIndexApi.js");
 
 function formatNow() {
@@ -18,7 +14,6 @@ function refreshSelectedItems(page) {
   page.setData(buildSelectedItemsState(
     page.data.allItems,
     page.data.selectedItemIds,
-    page.data.tasks,
     page.data.allItemsLoaded
   ));
 }
@@ -133,8 +128,7 @@ async function saveSelectedItems(page, ids) {
     const savedIds = result.selectedItemIds || ids;
     page.setData({
       selectedItemIds: savedIds,
-      selectedUpdatedText,
-      taskBadgeCount: calcTaskBadgeCount(page.data.tasks, page.data.selectedItems)
+      selectedUpdatedText
     }, () => {
       refreshSelectedItems(page);
       page.buildGrouped(page.data.categoryNames, page.data.allItems);

@@ -8,6 +8,7 @@ const { backHome } = require("../../utils/navigation.js");
 const { DEFAULT_SKIN, syncPageSkin } = require("../../utils/skin.js");
 const { isAdminModeActive } = require("../../utils/adminMode.js");
 const { normalizeItems } = require("../../utils/indexItemView.js");
+const { mergeLegacyPlans } = require("../../utils/planningState.js");
 const indexCache = require("../../utils/indexCache.js");
 const indexDataLoader = require("../../utils/indexDataLoader.js");
 const indexDrag = require("../../utils/indexDrag.js");
@@ -69,12 +70,8 @@ Page({
     floatItem: null,
     floatRank: 1,
     plans: [],
-    tasks: [],
-    taskBadgeCount: 0,
     newPlanText: "",
-    newTaskText: "",
     showPlanInput: false,
-    showTaskInput: false,
     about: {
       desc: "一个可爱的个人衣柜",
       createdAt: ""
@@ -173,14 +170,14 @@ Page({
     const wardrobe = payload.wardrobe || {};
     const cats = payload.categories || [];
     const items = normalizeItems(payload.items || []);
-    this._wardrobeForCache = wardrobe;
+    const planState = mergeLegacyPlans(wardrobe.plans, wardrobe.tasks);
+    this._wardrobeForCache = { ...wardrobe, plans: planState.plans, tasks: [] };
 
     this.setData({
       wardrobeName: wardrobe.name || this.data.wardrobeName,
       "about.desc": wardrobe.desc || this.data.about.desc,
       "about.createdAt": wardrobe.createTime || this.data.about.createdAt,
-      plans: wardrobe.plans || [],
-      tasks: wardrobe.tasks || [],
+      plans: planState.plans,
       selectedItemIds: wardrobe.selectedItemIds || [],
       selectedUpdatedText: wardrobe.selectedUpdatedText || "",
       categoryNames: cats,
@@ -192,6 +189,9 @@ Page({
     }, () => {
       this.refreshSelectedItems();
       this.buildGrouped(cats, items, { resetActive: options.resetActive !== false });
+      if (planState.migrated && !options.fromCache) {
+        this.saveMeta({ plans: planState.plans, tasks: [] });
+      }
     });
   },
 
@@ -622,26 +622,6 @@ Page({
 
   deletePlan(e) {
     indexMetaActions.deletePlan(this, e);
-  },
-
-  toggleTaskInput() {
-    indexMetaActions.toggleTaskInput(this);
-  },
-
-  onTaskInput(e) {
-    indexMetaActions.onTaskInput(this, e);
-  },
-
-  addTask() {
-    indexMetaActions.addTask(this);
-  },
-
-  toggleTaskDone(e) {
-    indexMetaActions.toggleTaskDone(this, e);
-  },
-
-  deleteTask(e) {
-    indexMetaActions.deleteTask(this, e);
   },
 
   async saveMeta(data) {

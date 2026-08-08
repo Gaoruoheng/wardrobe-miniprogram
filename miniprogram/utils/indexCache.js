@@ -91,7 +91,7 @@ function cacheCurrentWardrobeState(page, wardrobeOverrides = {}) {
       desc: page.data.about.desc,
       createTime: page.data.about.createdAt,
       plans: page.data.plans,
-      tasks: page.data.tasks,
+      tasks: [],
       selectedItemIds: page.data.selectedItemIds,
       selectedUpdatedText: page.data.selectedUpdatedText,
       ...wardrobeOverrides
@@ -132,7 +132,7 @@ function cacheManagePreview(page) {
       desc: page.data.about.desc,
       createTime: page.data.about.createdAt,
       plans: page.data.plans,
-      tasks: page.data.tasks,
+      tasks: [],
       selectedItemIds: page.data.selectedItemIds,
       selectedUpdatedText: page.data.selectedUpdatedText
     },

@@ -1,12 +1,5 @@
 const { decorateItemStatus } = require("./itemStatus.js");
 
-function calcTaskBadgeCount(tasks, selectedItems, selectedItemIds) {
-  const hasPackage = (selectedItems && selectedItems.length > 0) ||
-    (selectedItemIds && selectedItemIds.length > 0);
-  const packageCount = hasPackage ? 1 : 0;
-  return (tasks || []).length + packageCount;
-}
-
 function uniqueIds(ids) {
   const cleanIds = [];
   (ids || []).forEach(id => {
@@ -15,7 +8,7 @@ function uniqueIds(ids) {
   return cleanIds;
 }
 
-function buildSelectedItemsState(allItems, selectedItemIds, tasks, allItemsLoaded) {
+function buildSelectedItemsState(allItems, selectedItemIds, allItemsLoaded) {
   const itemMap = {};
   (allItems || []).forEach(item => {
     if (item && item._id) itemMap[item._id] = item;
@@ -41,13 +34,11 @@ function buildSelectedItemsState(allItems, selectedItemIds, tasks, allItemsLoade
     selectedItemIds: cleanSelectedItemIds,
     selectedItems,
     pickPackagePreview: selectedItems.slice(0, 3),
-    storedSelectedCount: selectedItems.filter(item => item.isStored).length,
-    taskBadgeCount: calcTaskBadgeCount(tasks, selectedItems, cleanSelectedItemIds)
+    storedSelectedCount: selectedItems.filter(item => item.isStored).length
   };
 }
 
 module.exports = {
-  calcTaskBadgeCount,
   uniqueIds,
   buildSelectedItemsState
 };

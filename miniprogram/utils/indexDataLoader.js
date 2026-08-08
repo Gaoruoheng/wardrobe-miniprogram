@@ -9,6 +9,7 @@ const {
   mergeItems
 } = require("./indexItemView.js");
 const wardrobeIndexApi = require("../services/wardrobeIndexApi.js");
+const { mergeLegacyPlans } = require("./planningState.js");
 
 const FIRST_SCREEN_ITEM_LIMIT = 20;
 const ON_DEMAND_PAGE_SIZE = 20;
@@ -22,17 +23,18 @@ async function fetchWardrobeInfo(page, wardrobeId) {
   try {
     const res = await db.collection("wardrobe_hubs").doc(wardrobeId).get();
     if (!page.canUseWardrobe(res.data)) return;
-    page._wardrobeForCache = res.data;
+    const planState = mergeLegacyPlans(res.data.plans, res.data.tasks);
+    page._wardrobeForCache = { ...res.data, plans: planState.plans, tasks: [] };
     page.setData({
       wardrobeName: res.data.name || "我的衣柜",
       "about.desc": res.data.desc || "一个可爱的个人衣柜",
       "about.createdAt": res.data.createTime || "",
-      plans: res.data.plans || [],
-      tasks: res.data.tasks || [],
+      plans: planState.plans,
       selectedItemIds: res.data.selectedItemIds || [],
       selectedUpdatedText: res.data.selectedUpdatedText || ""
     }, () => {
       page.refreshSelectedItems();
+      if (planState.migrated) page.saveMeta({ plans: planState.plans, tasks: [] });
     });
   } catch (err) {
     console.error(err);

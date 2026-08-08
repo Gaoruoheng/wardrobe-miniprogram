@@ -75,6 +75,21 @@ test("index WXML keeps valid tag nesting", () => {
   assertWxmlNesting(read("miniprogram/pages/index/index.wxml"));
 });
 
+test("index migrates legacy tasks into the single plans state", () => {
+  const indexJs = read("miniprogram/pages/index/index.js");
+  const metaActions = read("miniprogram/utils/indexMetaActions.js");
+  const selectionActions = read("miniprogram/utils/indexSelectionActions.js");
+  const cache = read("miniprogram/utils/indexCache.js");
+
+  assert.match(indexJs, /mergeLegacyPlans/);
+  assert.match(indexJs, /plans:\s*planState\.plans/);
+  assert.match(indexJs, /saveMeta\(\{ plans: planState\.plans, tasks: \[\] \}\)/);
+  assert.doesNotMatch(indexJs, /taskBadgeCount|newTaskText|showTaskInput/);
+  assert.doesNotMatch(metaActions, /addTask|toggleTaskDone|deleteTask/);
+  assert.doesNotMatch(selectionActions, /calcTaskBadgeCount|page\.data\.tasks/);
+  assert.match(cache, /tasks:\s*\[\]/);
+});
+
 test("add page keeps the fixed save action and opts inputs into keyboard avoidance", () => {
   const wxml = read("miniprogram/pages/add/add.wxml");
   const wxss = read("miniprogram/pages/add/add.wxss");

@@ -1,4 +1,3 @@
-const { calcTaskBadgeCount } = require("./selectionState.js");
 const wardrobeIndexApi = require("../services/wardrobeIndexApi.js");
 
 function togglePlanInput(page) {
@@ -33,49 +32,6 @@ function deletePlan(page, e) {
   saveMeta(page, { plans });
 }
 
-function toggleTaskInput(page) {
-  page.setData({ showTaskInput: !page.data.showTaskInput });
-}
-
-function onTaskInput(page, e) {
-  page.setData({ newTaskText: e.detail.value });
-}
-
-function addTask(page) {
-  const text = page.data.newTaskText.trim();
-  if (!text) return;
-  const tasks = page.data.tasks.concat([{ text, done: false, id: Date.now() }]);
-  page.setData({
-    tasks,
-    newTaskText: "",
-    showTaskInput: false,
-    taskBadgeCount: calcTaskBadgeCount(tasks, page.data.selectedItems)
-  });
-  saveMeta(page, { tasks });
-}
-
-function toggleTaskDone(page, e) {
-  const index = Number(e.currentTarget.dataset.index);
-  const tasks = page.data.tasks.map((task, taskIndex) =>
-    taskIndex === index ? { ...task, done: !task.done } : task
-  );
-  page.setData({
-    tasks,
-    taskBadgeCount: calcTaskBadgeCount(tasks, page.data.selectedItems)
-  });
-  saveMeta(page, { tasks });
-}
-
-function deleteTask(page, e) {
-  const index = Number(e.currentTarget.dataset.index);
-  const tasks = page.data.tasks.filter((_, taskIndex) => taskIndex !== index);
-  page.setData({
-    tasks,
-    taskBadgeCount: calcTaskBadgeCount(tasks, page.data.selectedItems)
-  });
-  saveMeta(page, { tasks });
-}
-
 async function saveMeta(page, data) {
   if (!page.data.wardrobeId) return;
   page.cacheCurrentWardrobeState(data);
@@ -92,10 +48,5 @@ module.exports = {
   addPlan,
   togglePlanDone,
   deletePlan,
-  toggleTaskInput,
-  onTaskInput,
-  addTask,
-  toggleTaskDone,
-  deleteTask,
   saveMeta
 };
