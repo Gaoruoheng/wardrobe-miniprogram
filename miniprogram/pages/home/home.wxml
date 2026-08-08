@@ -11,11 +11,11 @@
         <view class="hero-text" bindlongpress="adminLongPress">
             <text class="eyebrow">🧸 Kuma Closet</text>
             <block wx:if="{{selectedSkin == 'princess-castle'}}">
-                <text class="hero-title hero-title-castle">公主城堡</text>
+                <text class="hero-title hero-title-castle">月宫衣阁</text>
                 <text class="hero-title hero-title-castle hero-title-castle-small">衣橱</text>
             </block>
             <text class="hero-title" wx:if="{{selectedSkin != 'princess-castle'}}">甜蜜小窝</text>
-            <text class="hero-subtitle">{{selectedSkin == 'princess-castle' ? '选择一个衣柜，走进今天的魔法搭配大厅。' : '选择一个衣柜，开始今天的可爱搭配。'}}</text>
+            <text class="hero-subtitle">{{selectedSkin == 'princess-castle' ? '选择一个衣柜，开始今天的月光搭配。' : '选择一个衣柜，开始今天的可爱搭配。'}}</text>
         </view>
         <view class="hero-stickers">
             <image class="hero-sticker sticker-main" mode="aspectFit" src="/images/home/bear-wave.png"></image>
@@ -107,7 +107,7 @@
     <view class="section-head">
         <view>
             <text class="section-title">衣柜列表</text>
-            <text class="section-subtitle">{{selectedSkin == 'princess-castle' ? '每个衣柜都是城堡房间' : '每个衣柜都是一个独立的小包裹'}}</text>
+            <text class="section-subtitle">{{selectedSkin == 'princess-castle' ? '每个衣柜都是一间月光衣阁' : '每个衣柜都是一个独立的小包裹'}}</text>
         </view>
         <view class="section-actions">
             <view bindtap="openSkinSheet" class="skin-switch">
@@ -217,7 +217,7 @@
             <view class="add-plus">+</view>
             <view class="add-content">
                 <text class="add-title">新建衣柜</text>
-                <text class="add-desc">{{selectedSkin == 'princess-castle' ? '添加一间新的衣橱房间' : '给她再建一个可爱的小空间'}}</text>
+                <text class="add-desc">{{selectedSkin == 'princess-castle' ? '添加一间新的月光衣阁' : '给她再建一个可爱的小空间'}}</text>
             </view>
             <view class="add-gem"></view>
             <image class="add-sticker" mode="aspectFit" src="/images/home/bear-lucky.png"></image>
@@ -229,7 +229,7 @@
             <view class="skin-sheet-head">
                 <view>
                     <text class="sheet-title">皮肤更换</text>
-                    <text class="sheet-subtitle">当前：{{selectedSkin == 'princess-castle' ? '公主城堡' : '甜蜜小窝'}}</text>
+                    <text class="sheet-subtitle">当前：{{selectedSkin == 'princess-castle' ? '月宫衣阁' : '甜蜜小窝'}}</text>
                 </view>
                 <view class="skin-sheet-star">
                     <text>✦</text>

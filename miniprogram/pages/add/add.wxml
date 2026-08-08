@@ -46,7 +46,7 @@
       </block>
       <view class="hero-copy">
         <text class="eyebrow">{{selectedSkin == 'princess-castle' ? 'Moon Palace' : 'Kuma Closet'}}</text>
-        <text class="title-text">{{selectedSkin == 'princess-castle' ? '月宫入衣台' : '给衣柜添一件小可爱'}}</text>
+        <text class="title-text">{{selectedSkin == 'princess-castle' ? '新增衣物' : '给衣柜添一件小可爱'}}</text>
         <text class="title-sub" wx:if="{{selectedSkin == 'princess-castle'}}">把今日新衣收入云纹衣阁</text>
       </view>
       <image class="hero-sticker" src="/images/home/bear-shopping.png" mode="aspectFit"></image>
@@ -74,8 +74,8 @@
           <view class="upload-silk-cloud cloud-one"></view>
           <view class="upload-silk-cloud cloud-two"></view>
         </view>
-        <text class="upload-hint">{{selectedSkin == 'princess-castle' ? '轻点月窗，收入今日新衣' : '点击选择衣服照片'}}</text>
-        <text class="upload-sub">{{selectedSkin == 'princess-castle' ? '可先留空，月宫会暂放默认衣影' : '可选，没传照片会用默认图'}}</text>
+        <text class="upload-hint">{{selectedSkin == 'princess-castle' ? '点击选择衣服照片' : '点击选择衣服照片'}}</text>
+        <text class="upload-sub">{{selectedSkin == 'princess-castle' ? '可选，未上传将使用默认图片' : '可选，没传照片会用默认图'}}</text>
       </view>
       <view class="upload-badge">
         <block wx:if="{{selectedSkin == 'princess-castle'}}">
@@ -95,7 +95,7 @@
         <view class="panel-cloud panel-cloud-a"></view>
       </block>
       <view class="section-head">
-        <text class="section-title">{{selectedSkin == 'princess-castle' ? '衣影小札' : '衣服信息'}}</text>
+        <text class="section-title">{{selectedSkin == 'princess-castle' ? '衣物信息' : '衣服信息'}}</text>
       </view>
 
       <view class="form-item">
@@ -116,10 +116,10 @@
       </block>
       <view class="section-head">
         <view>
-          <text class="section-title">{{selectedSkin == 'princess-castle' ? '收进哪一阁' : '选择分类'}}</text>
+          <text class="section-title">{{selectedSkin == 'princess-castle' ? '选择分类' : '选择分类'}}</text>
         </view>
         <view class="add-cat-toggle" bindtap="toggleCategoryInput">
-          <text>{{showCategoryInput ? '收起' : (selectedSkin == 'princess-castle' ? '+ 月签' : '+ 分类')}}</text>
+          <text>{{showCategoryInput ? '收起' : (selectedSkin == 'princess-castle' ? '+ 分类' : '+ 分类')}}</text>
         </view>
       </view>
 

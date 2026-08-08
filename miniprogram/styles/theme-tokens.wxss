@@ -1,0 +1,28 @@
+page,
+.theme-scope {
+  --skin-bg: #fff8ea;
+  --skin-surface: #fffdf9;
+  --skin-surface-soft: #fff7ef;
+  --skin-ink: #5c4b51;
+  --skin-muted: #6f6268;
+  --skin-accent: #d97992;
+  --skin-accent-soft: #ffe4ec;
+  --skin-gold: #9a6b2d;
+  --skin-border: rgba(92, 75, 81, 0.24);
+  --skin-shadow: 0 8rpx 16rpx rgba(92, 75, 81, 0.1);
+  --skin-decoration-opacity: 0.72;
+}
+
+.skin-princess-castle {
+  --skin-bg: #f9f5ff;
+  --skin-surface: #fffdfd;
+  --skin-surface-soft: #f8f2fc;
+  --skin-ink: #4b3563;
+  --skin-muted: #695779;
+  --skin-accent: #76518f;
+  --skin-accent-soft: #eadcf4;
+  --skin-gold: #815d28;
+  --skin-border: rgba(107, 74, 135, 0.24);
+  --skin-shadow: 0 8rpx 16rpx rgba(82, 62, 111, 0.1);
+  --skin-decoration-opacity: 0.5;
+}

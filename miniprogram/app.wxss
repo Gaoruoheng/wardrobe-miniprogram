@@ -1,3 +1,5 @@
+@import "./styles/theme-tokens.wxss";
+
 /**app.wxss**/
 page {
   --theme-color: #5C4B51; /* Dark Brown */
@@ -94,7 +96,7 @@ button {
   font-size: 32rpx;
   padding: 20rpx 40rpx;
   line-height: 1.5;
-  transition: all 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
 }
 
 button::after {

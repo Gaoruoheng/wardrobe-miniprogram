@@ -4,7 +4,7 @@ var DEFAULT_SKIN = '';
 
 var SKIN_OPTIONS = [
   { id: '', name: '甜蜜小窝', desc: '温馨可爱' },
-  { id: 'princess-castle', name: '公主城堡', desc: '梦幻粉紫' }
+  { id: 'princess-castle', name: '月宫衣阁', desc: '月色粉紫' }
 ];
 
 function normalizeSkin(skin) {
