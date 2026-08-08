@@ -446,14 +446,30 @@
     background: transparent;
     border: 0;
     border-radius: 0;
+    box-shadow: none;
+    color: inherit;
+    height: var(--touch-target);
     line-height: 1;
     margin: 0;
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
+    overflow: visible;
     padding: 0;
     text-align: center;
+    transform: none;
+    transition: none;
+    width: var(--touch-target);
 }
 
 .share-button::after {
     border: none;
+    display: none;
+}
+
+.share-button:active {
+    background: transparent;
+    box-shadow: none;
+    transform: none;
 }
 
 .header-action-hit {
@@ -1533,19 +1549,90 @@
 }
 
 .fab-add {
-    background: linear-gradient(180deg,#ffeaf1,#ffb7c5);
-    border: 4rpx solid #6b5960;
-    border-radius: 50%;
+    -webkit-align-items: center;
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 999rpx;
     bottom: 38rpx;
-    box-shadow: 0 8rpx 0 #efa0b4,0 14rpx 24rpx rgba(255,143,171,.32);
+    box-shadow: none;
     box-sizing: border-box;
-    color: #fff;
-    font-size: 54rpx;
-    height: 104rpx;
+    display: -webkit-flex;
+    display: flex;
+    height: 96rpx;
+    -webkit-justify-content: center;
+    justify-content: center;
+    overflow: visible;
     position: fixed;
     right: 28rpx;
-    width: 104rpx;
+    width: 184rpx;
     z-index: 100;
+}
+
+.fab-default-face {
+    -webkit-align-items: center;
+    align-items: center;
+    background: linear-gradient(180deg,#fffdf9,#ffeaf1);
+    border: 3rpx solid #6b5960;
+    border-radius: 999rpx;
+    box-shadow: 0 7rpx 14rpx rgba(107,89,96,.14),0 5rpx 0 #f2b8c6;
+    box-sizing: border-box;
+    display: -webkit-flex;
+    display: flex;
+    height: 88rpx;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    padding: 0 22rpx 0 12rpx;
+    position: relative;
+    transition: transform .12s ease,box-shadow .12s ease;
+    width: 184rpx;
+}
+
+.fab-default-plus {
+    -webkit-align-items: center;
+    align-items: center;
+    background: linear-gradient(180deg,#ffbdcb,#ef8faa);
+    border: 2rpx solid rgba(107,89,96,.52);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 3rpx rgba(255,255,255,.5);
+    color: #fff;
+    display: -webkit-flex;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 42rpx;
+    font-weight: 700;
+    height: 58rpx;
+    -webkit-justify-content: center;
+    justify-content: center;
+    line-height: 54rpx;
+    margin-right: 12rpx;
+    padding-bottom: 3rpx;
+    width: 58rpx;
+}
+
+.fab-default-label {
+    color: #6b4f58;
+    font-size: 25rpx;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.fab-default-spark {
+    background: #f1c75b;
+    border: 2rpx solid #fff8e5;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3rpx rgba(241,199,91,.18);
+    height: 10rpx;
+    position: absolute;
+    right: 13rpx;
+    top: 10rpx;
+    width: 10rpx;
+}
+
+.fab-add:active .fab-default-face {
+    box-shadow: 0 3rpx 8rpx rgba(107,89,96,.12),0 2rpx 0 #f2b8c6;
+    transform: translateY(3rpx);
 }
 
 .fab-add.fab-lift {

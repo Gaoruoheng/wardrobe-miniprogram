@@ -71,6 +71,23 @@ test("index keeps the existing controls while adding larger hit areas and feedba
   assert.match(wxss, /\.todo-check-hit[\s\S]*?min-width:\s*var\(--touch-target\)/);
 });
 
+test("share native host has no visible outer chrome", () => {
+  const wxss = read("miniprogram/pages/index/styles/base.wxss");
+
+  assert.match(wxss, /\.share-button\s*\{[\s\S]*?box-shadow:\s*none/);
+  assert.match(wxss, /\.share-button:active\s*\{[\s\S]*?transform:\s*none/);
+});
+
+test("default skin add action uses a labeled visual face", () => {
+  const wxml = read("miniprogram/pages/index/index.wxml");
+  const wxss = read("miniprogram/pages/index/styles/base.wxss");
+
+  assert.match(wxml, /class="fab-default-face"/);
+  assert.match(wxml, />新增衣物<\/text>/);
+  assert.match(wxss, /\.fab-default-face\s*\{/);
+  assert.match(wxss, /\.fab-default-label\s*\{/);
+});
+
 test("index WXML keeps valid tag nesting", () => {
   assertWxmlNesting(read("miniprogram/pages/index/index.wxml"));
 });

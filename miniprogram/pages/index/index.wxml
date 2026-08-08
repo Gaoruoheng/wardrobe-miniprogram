@@ -381,6 +381,10 @@
             <view class="fab-rabbit-star fab-star-one"></view>
             <view class="fab-rabbit-star fab-star-two"></view>
         </block>
-        <text wx:else>+</text>
+        <view class="fab-default-face" wx:else>
+            <text class="fab-default-plus">+</text>
+            <text class="fab-default-label">新增衣物</text>
+            <view class="fab-default-spark"></view>
+        </view>
     </view>
 </view>
