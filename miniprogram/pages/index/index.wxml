@@ -85,8 +85,7 @@
                     <view bindtap="switchTab" class="tab-item {{activeTab===0?'active':''}}" data-tab="0">菜单 {{count}}</view>
                     <view bindtap="switchTab" class="tab-item {{activeTab===1?'active':''}}" data-tab="1">套装</view>
                     <view bindtap="switchTab" class="tab-item {{activeTab===2?'active':''}}" data-tab="2">计划</view>
-                    <view bindtap="switchTab" class="tab-item {{activeTab===3?'active':''}}" data-tab="3">任务 {{taskBadgeCount}}</view>
-                    <view bindtap="switchTab" class="tab-item {{activeTab===4?'active':''}}" data-tab="4">关于</view>
+                    <view bindtap="switchTab" class="tab-item {{activeTab===3?'active':''}}" data-tab="3">关于</view>
                 </view>
             </scroll-view>
             <view bindtap="toggleSearch" class="search-mini">搜索</view>
@@ -241,29 +240,6 @@
             <text class="section-title">我的计划</text>
             <view bindtap="togglePlanInput" class="add-mini-btn kawaii-btn">+</view>
         </view>
-        <view class="input-row" wx:if="{{showPlanInput}}">
-            <input bindinput="onPlanInput" class="kawaii-input-inline" placeholder="新计划" value="{{newPlanText}}"></input>
-            <view bindtap="addPlan" class="confirm-btn kawaii-btn">OK</view>
-        </view>
-        <view class="todo-item" wx:for="{{plans}}" wx:key="id">
-            <view bindtap="togglePlanDone" class="todo-check-hit" data-index="{{index}}">
-                <view class="todo-check {{item.done?'done':''}}">
-                    <text>{{item.done?'OK':''}}</text>
-                </view>
-            </view>
-            <text class="todo-text {{item.done?'strikethrough':''}}">{{item.text}}</text>
-            <view bindtap="deletePlan" class="todo-del-hit" data-index="{{index}}"><view class="todo-del">x</view></view>
-        </view>
-        <view class="empty-tip" wx:if="{{plans.length===0}}">
-            <text>还没有计划</text>
-        </view>
-        <view style="height:200rpx;"></view>
-    </scroll-view>
-    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===3}}">
-        <view class="section-header">
-            <text class="section-title">我的任务</text>
-            <view bindtap="toggleTaskInput" class="add-mini-btn kawaii-btn">+</view>
-        </view>
         <view bindtap="openPickPanel" class="pick-package-card" wx:if="{{selectedItems.length>0}}">
             <view class="package-face">
                 <view class="package-eye eye-left"></view>
@@ -280,25 +256,25 @@
             </view>
             <view class="package-open">打开</view>
         </view>
-        <view class="input-row" wx:if="{{showTaskInput}}">
-            <input bindinput="onTaskInput" class="kawaii-input-inline" placeholder="新任务" value="{{newTaskText}}"></input>
-            <view bindtap="addTask" class="confirm-btn kawaii-btn">OK</view>
+        <view class="input-row" wx:if="{{showPlanInput}}">
+            <input bindinput="onPlanInput" class="kawaii-input-inline" placeholder="新计划" value="{{newPlanText}}"></input>
+            <view bindtap="addPlan" class="confirm-btn kawaii-btn">OK</view>
         </view>
-        <view class="todo-item" wx:for="{{tasks}}" wx:key="id">
-            <view bindtap="toggleTaskDone" class="todo-check-hit" data-index="{{index}}">
+        <view class="todo-item" wx:for="{{plans}}" wx:key="id">
+            <view bindtap="togglePlanDone" class="todo-check-hit" data-index="{{index}}">
                 <view class="todo-check {{item.done?'done':''}}">
                     <text>{{item.done?'OK':''}}</text>
                 </view>
             </view>
             <text class="todo-text {{item.done?'strikethrough':''}}">{{item.text}}</text>
-            <view bindtap="deleteTask" class="todo-del-hit" data-index="{{index}}"><view class="todo-del">x</view></view>
+            <view bindtap="deletePlan" class="todo-del-hit" data-index="{{index}}"><view class="todo-del">x</view></view>
         </view>
-        <view class="empty-tip" wx:if="{{tasks.length===0&&selectedItems.length===0}}">
-            <text>还没有任务</text>
+        <view class="empty-tip" wx:if="{{plans.length===0&&selectedItems.length===0}}">
+            <text>还没有计划</text>
         </view>
         <view style="height:200rpx;"></view>
     </scroll-view>
-    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===4}}">
+    <scroll-view scroll-y class="tab-content" style="height:100%" wx:if="{{activeTab===3}}">
         <view class="about-card kawaii-card">
             <text class="about-name">{{wardrobeName}}</text>
             <text class="about-desc">{{about.desc}}</text>

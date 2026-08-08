@@ -48,13 +48,13 @@ test("standalone outfit tab registers components and quick-save entry", () => {
   const indexWxml = read("miniprogram/pages/index/index.wxml");
   const indexJson = read("miniprogram/pages/index/index.json");
   const outfitTab = indexWxml.match(/<scroll-view[^>]*wx:if="\{\{activeTab===1\}\}"[^>]*>([\s\S]*?)<\/scroll-view>/);
-  const taskTab = indexWxml.match(/<scroll-view[^>]*wx:if="\{\{activeTab===3\}\}"[^>]*>([\s\S]*?)<\/scroll-view>/);
+  const planTab = indexWxml.match(/<scroll-view[^>]*wx:if="\{\{activeTab===2\}\}"[^>]*>([\s\S]*?)<\/scroll-view>/);
 
-  assert.match(indexWxml, /data-tab="0"[\s\S]*data-tab="1">套装[\s\S]*data-tab="2"[\s\S]*data-tab="3"[\s\S]*data-tab="4"/);
+  assert.match(indexWxml, /data-tab="0"[\s\S]*data-tab="1">套装[\s\S]*data-tab="2">计划[\s\S]*data-tab="3">关于/);
   assert.ok(outfitTab, "standalone outfit tab should use activeTab 1");
   assert.match(outfitTab[1], /<outfit-section/);
-  assert.ok(taskTab, "task tab should use activeTab 3");
-  assert.doesNotMatch(taskTab[1], /<outfit-section/);
+  assert.ok(planTab, "plan tab should use activeTab 2");
+  assert.doesNotMatch(planTab[1], /<outfit-section/);
   assert.match(indexWxml, /<outfit-detail-panel/);
   assert.match(indexWxml, /<outfit-quick-save/);
   assert.match(indexWxml, /bindtap="openQuickSaveOutfit"/);

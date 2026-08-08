@@ -90,6 +90,16 @@ test("index migrates legacy tasks into the single plans state", () => {
   assert.match(cache, /tasks:\s*\[\]/);
 });
 
+test("index renders one planning tab with the pickup list at its top", () => {
+  const wxml = read("miniprogram/pages/index/index.wxml");
+
+  assert.match(wxml, /data-tab="2">计划<\/view>/);
+  assert.doesNotMatch(wxml, /data-tab="3">任务/);
+  assert.match(wxml, /activeTab===2[\s\S]*?pick-package-card/);
+  assert.doesNotMatch(wxml, /activeTab===4/);
+  assertWxmlNesting(wxml);
+});
+
 test("add page keeps the fixed save action and opts inputs into keyboard avoidance", () => {
   const wxml = read("miniprogram/pages/add/add.wxml");
   const wxss = read("miniprogram/pages/add/add.wxss");
