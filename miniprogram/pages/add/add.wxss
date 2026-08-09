@@ -332,6 +332,7 @@
 
 .save-btn {
   height: 100rpx;
+  min-height: var(--touch-target);
   position: fixed;
   left: 32rpx;
   right: 32rpx;
@@ -341,14 +342,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 22%, #FFB7C5 0 8rpx, transparent 9rpx),
+    radial-gradient(circle at 88% 74%, rgba(255, 255, 255, 0.24) 0 12rpx, transparent 13rpx),
+    linear-gradient(135deg, #C74870 0%, #C1436B 52%, #B93462 100%);
+  border: 3rpx solid #7A3C51;
+  border-radius: 999rpx;
+  box-shadow:
+    0 14rpx 26rpx rgba(185, 52, 98, 0.28),
+    inset 0 3rpx 0 rgba(255, 255, 255, 0.44);
+  color: #FFFFFF;
   font-size: 32rpx;
   font-weight: 900;
+  letter-spacing: 2rpx;
+  text-shadow: 0 2rpx 5rpx rgba(96, 35, 56, 0.28);
   width: auto;
   box-sizing: border-box;
+  transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.save-btn text {
+  position: relative;
+  z-index: 1;
+}
+
+.save-btn:active {
+  transform: translateY(4rpx);
+  box-shadow:
+    0 7rpx 14rpx rgba(185, 52, 98, 0.24),
+    inset 0 3rpx 0 rgba(255, 255, 255, 0.34);
 }
 
 .save-spacer {
   height: calc(156rpx + env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .save-btn {
+    transition-duration: 0.01ms;
+  }
 }
 
 /* Moon-palace theme for the add flow. It follows the Home skin switch. */
