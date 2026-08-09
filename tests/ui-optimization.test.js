@@ -126,14 +126,16 @@ test("add page keeps the fixed save action and opts inputs into keyboard avoidan
   assert.doesNotMatch(wxss, /color:\s*#9A8990/);
 });
 
-test("default add page save action uses a pink cute button treatment", () => {
+test("default add page save action matches the hero card palette", () => {
   const wxml = read("miniprogram/pages/add/add.wxml");
   const wxss = read("miniprogram/pages/add/add.wxss");
 
   assert.match(wxml, /class="save-btn kawaii-btn" bindtap="saveItem"/);
   assert.match(wxml, />保存到衣柜<\/text>/);
   assert.match(wxss, /\.save-btn\s*\{[^}]*min-height:\s*var\(--touch-target\)/);
-  assert.match(wxss, /\.save-btn\s*\{[^}]*background:[^}]*#FFB7C5/);
-  assert.match(wxss, /\.save-btn\s*\{[^}]*color:\s*#FFFFFF/);
+  assert.match(wxss, /\.save-btn\s*\{[^}]*background:\s*#FFE6EF/);
+  assert.match(wxss, /\.save-btn\s*\{[^}]*border:\s*4rpx solid #5C4B51/);
+  assert.match(wxss, /\.save-btn\s*\{[^}]*color:\s*#5C4B51/);
+  assert.match(wxss, /\.save-btn\s*\{[^}]*box-shadow:\s*6rpx 6rpx 0 #5C4B51/);
   assert.match(wxss, /\.save-btn:active\s*\{[^}]*transform:\s*translateY\(4rpx\)/);
 });
